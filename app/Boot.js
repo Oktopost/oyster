@@ -4,7 +4,6 @@
 
 	var Boot = function () {
 		var route = Oyster.instance('Route');
-		var link = Oyster.instance('Link');
 
 
 		var onClick = function (elem) {
@@ -16,7 +15,7 @@
 
 			$(document).on('click', 'a[data-o-link]', function (e) {
 				e.preventDefault();
-				bindClicks($(this));
+				onClick($(this));
 			});
 		};
 
