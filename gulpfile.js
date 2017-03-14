@@ -12,7 +12,7 @@ var files = [
 	'src/**/*'
 ];
 
-gulp.task('build', function () {
+var build = function () {
 	gulp.src(files)
 		.pipe(concat('oyster.js'))
 		.pipe(gulp.dest('build'));
@@ -33,4 +33,13 @@ gulp.task('build', function () {
 	}))	
 	.pipe(concat('templates.js'))
 	.pipe(gulp.dest('build'));
+}
+
+
+gulp.task('build', function () {
+	build();
 });
+
+gulp.task('watch', function () {
+	gulp.watch(['src/**/*', 'app/**/*'], ['build']);
+})

@@ -1,9 +1,11 @@
 (function () { 
 	'use strict';
 
+	var is = plankton.is;
 	var baseName = 'Oyster';
 
 	window[baseName] = window[baseName] || {};
+
 
 
 	/**
@@ -15,7 +17,7 @@
 		var names = name.split('.');
 		
 		for (var i = 0; i < names.length - 1; i++) {
-			if (typeof namespace[names[i]] === 'undefined') {
+			if (is.undefined(namespace[names[i]])) {
 				namespace[names[i]] = {};
 			}
 
