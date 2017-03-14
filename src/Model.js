@@ -8,7 +8,8 @@
 	var defaults = {
 		onDone: null,
 		onFail: null,
-		onComplete: null
+		onComplete: null,
+		onSend: null
 	};
 
 
@@ -17,12 +18,21 @@
 
 
 		var getRequest = function (url, type, params) {
-			return {
+			var request = {
 				url: url,
 				type: type,
-				dataType: 'json',
-				data: params
+				dataType: 'json'
 			};
+
+			if (is.object.notEmpty(params)) {
+				request.data = params;
+			}
+
+			if (is.function(settings.onSend)) {
+				request.beforeSend = settings.onSend;
+			}
+
+			return request;
 		};
 
 		var sendRequest = function (request) {

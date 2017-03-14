@@ -3,16 +3,16 @@
 
 
 	var Route = function () {
-		var parser = Oyster.instance('parsers.Route');
+		var routeParser = Oyster.instance('parsers.Route');
 		
 
 		var getRoute = function () {
-			return parser.parse(window.History.getState().url);
+			return routeParser.parse(window.History.getState().url);
 		};
 
 
-		this.setParser = function (parser) {
-			parser = parser;
+		this.setRouteParser = function (parser) {
+			routeParser = parser;
 		};
 
 		this.bindState = function (callback) {			
