@@ -2,7 +2,6 @@
 	'use strict';
 
 
-
 	var Dispatch = function () {
 
 		this.stateChange = function (controller) {

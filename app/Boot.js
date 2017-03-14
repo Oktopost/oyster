@@ -13,7 +13,11 @@
 
 		var bindEvents = function () {
 			route.bindState();
-			link.bindClicks(onClick);
+
+			$(document).on('click', 'a[data-o-link]', function (e) {
+				e.preventDefault();
+				bindClicks($(this));
+			});
 		};
 
 		var init = function () {
