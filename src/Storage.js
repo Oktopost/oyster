@@ -48,7 +48,7 @@
 		 * @param {string} key
 		 */
 		this.remove = function (key) {
-			if (is.defined(sessionStorage[key])) {
+			if (is(sessionStorage[key])) {
 				sessionStorage.removeItem(key);
 			}
 		};

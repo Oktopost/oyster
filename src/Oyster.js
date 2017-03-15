@@ -1,10 +1,13 @@
 (function () { 
 	'use strict';
 
-	var is = plankton.is;
-	var baseName = 'Oyster';
 
-	window[baseName] = window[baseName] || {};
+	var BASE_NAME = 'Oyster';
+
+	var is = plankton.is;
+
+
+	window[BASE_NAME] = window[BASE_NAME] || {};
 
 
 
@@ -13,7 +16,7 @@
 	 * @return {object|function}
 	 */
 	var get = function (name) {	
-		var namespace = window[baseName];
+		var namespace = window[BASE_NAME];
 		var names = name.split('.');
 		
 		for (var i = 0; i < names.length - 1; i++) {
@@ -68,7 +71,7 @@
 	};
 
 
-	window[baseName]['register'] = register;
-	window[baseName]['instance'] = instance;
+	window[BASE_NAME]['register'] = register;
+	window[BASE_NAME]['instance'] = instance;
 
 })();

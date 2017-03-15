@@ -4,8 +4,7 @@
 
 	var Controller = function () {
 		
-		this.init = function (controller) {
-			Oyster.instance('Layout').render('layout');
+		this.init = function (controller) {			
 			Oyster.instance(controller).render();
 		};
 		

@@ -2,9 +2,9 @@
 	'use strict';
 
 
-	var Dispatch = function () {
+	var Dispatch = function () {		
 
-		this.stateChange = function (controller) {
+		this.stateChange = function (controller) {			
 			Oyster.instance('Controller').init(controller);
 		};
 

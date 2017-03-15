@@ -2,34 +2,51 @@
 	'use strict';
 
 
+	var is = plankton.is;
+	var text = plankton.text;
+
+
 	var Route = function () {
-		var routeParser = Oyster.instance('parsers.Route');
+		var routeParser;
 		
 
-		var getRoute = function () {
-			return routeParser.parse(window.History.getState().url);
+		var getName = function (str) {
+			if (str.length === 0) {
+				return '';
+			}
+
+			var parts = str.split('-');
+			var name = '';
+			var part;
+
+			for (part in parts) {
+				name = name + text.capitalize(parts[part]);
+			}
+
+			return name;
 		};
 
 
-		this.setRouteParser = function (parser) {
-			routeParser = parser;
+		this.setParser = function (parser) {
+			if (is.function(parser)) {
+				routeParser = parser;
+			}
 		};
 
-		this.bindState = function (callback) {			
-			window.History.Adapter.bind(window, 'statechange', function () {
-				Oyster.instance('Dispatch').stateChange(getRoute());
-			});
-		};
+		this.getRoute = function (url) {
+			if (is.function(routeParser)) {
+				return routeParser(url);
+			}
 
-		this.pushState = function (url, title, data) {
-			data = data || {};
-			data['rand'] = Math.random();
+			var parts = url.substring(1).split('/');
+			var part1 = parts[0].length ? parts[0] : 'index';
+			var part2 = is.undefined(parts[1]) ? '' : parts[1];
 
-			window.History.pushState(data, title, url);
+			return getName(part1) + getName(part2) + 'Controller';
 		};
 	};
 
 
-	Oyster.register('Route', Route);
+	window.Oyster.register('Route', Route);
 
 })();
