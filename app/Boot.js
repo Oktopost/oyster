@@ -7,9 +7,8 @@
 		
 
 		var onStateChange = function () {
-			var controller = Oyster.instance('Route').getRoute(state.getUrl());
-				
-			Oyster.instance('Dispatch').stateChange(controller);
+			var route = Oyster.instance('Route').getRoute(state.getUrl());
+			Oyster.instance('Dispatch').stateChange(route);
 		};
 
 		var onClick = function (elem) {
@@ -17,9 +16,7 @@
 		};
 
 		var bindEvents = function () {
-			window.History.Adapter.bind(window, 'statechange', function () {
-				
-			});
+			window.History.Adapter.bind(window, 'statechange', onStateChange);
 
 			$(document).on('click', 'a[data-o-link]', function (e) {
 				e.preventDefault();

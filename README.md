@@ -55,36 +55,24 @@ Oyster.instance('my.Model', options);
 
 ### Routing
 
-To initialize routing, use the Oyster Route object, like so:
+Oyster uses *History.js* to detect changes in the state of the window, like so:
 
 ``` javascript
-Oyster.instance('Route').bindState();
+window.History.Adapter.bind(window, 'statechange', function () {});
 ```
 
-This will bind the window state and will dispatch a call to correct controller on every state change. To push a new state, use:
+And the Route object is responsible for parsing the requested URL to your application controllers.
 
 ``` javascript
-Oyster.instance('Route').pushState(url, title, data);
+Oyster.instance('Route').getRoute('/my/home'); // MyHomeController
 ```
 
-Routes are automatically initialized in *Boot.js* but can be overridden.
+The default parser inside the Route object can be overridden for different routing preferences, like so:
 
-#### Example
-The following command:
 ``` javascript
-Oyster.instance('Route').pushState('/my/home', 'Home');
-```
-Will route to:
-```
-app/controllers/MyHomeController.js // this.render
-```
-And this command:
-``` javascript
-Oyster.instance('Route').pushState('/', 'Home');
-```
-Will route to:
-```
-app/controllers/IndexController.js // this.render
+Oyster.instance('Route').setParser(function (url) {
+	return 'MyController';
+});
 ```
 
 ### Model
@@ -101,8 +89,18 @@ var MyModel = Oyster.instance('Model', {
 var jqXHR = MyModel.get('/my/url');
 ```
 
+Or
+
+``` javascript
+var MyModel = Oyster.instance('Model');
+
+MyModel.get('/my/url').done(function (json) {
+	console.log('Hello World');
+});
+```
+
 ### Views
-Oyster uses Handlebars.js for templating and all templates are precompiled using gulp. Views can be loaded using:
+Oyster uses Handlebars.js for templating. All templates are precompiled using gulp. Views can be loaded using:
 
 ``` javascript
 Oyster.instance('View', dirname).get(template, { /* data */ });
