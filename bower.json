@@ -6,6 +6,6 @@
     "handlebars": "2.0.0",
     "history.js": "history#^1.8.0",
     "plankton": "*",
-    "plankton-text": "^0.0.3"
+    "plankton-text": "^0.0.5"
   }
 }
