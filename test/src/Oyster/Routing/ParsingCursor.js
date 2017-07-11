@@ -6,7 +6,7 @@ const ActionRoute	= root.Oyster.Routing.ActionRoute;
 const ParsingCursor = root.Oyster.Routing.ParsingCursor;
 
 
-suite.only('ParsingCursor', () => 
+suite('ParsingCursor', () => 
 {
 	suite('parseRouteConfig', () => 
 	{
@@ -26,6 +26,26 @@ suite.only('ParsingCursor', () =>
 			assert.equal('/a/b/{c}/e/f/d', res.route().path().text());
 		});
 		
+		test('Manager invoked', () => 
+		{
+			var action;
+			var params;
+			
+			var subject = new ParsingCursor({
+				handle: (a, b) =>
+				{
+					action = a;
+					params = b;
+				}
+			});
+			
+			var res = subject.parseRouteConfig({ action: {}, path: '/a' });
+			
+			res.route().handle('/a', { a: 1 });
+			
+			assert.strictEqual(action, res);
+			assert.deepEqual(params, { a: 1 });
+		});
 		
 		suite('First call', () =>
 		{
