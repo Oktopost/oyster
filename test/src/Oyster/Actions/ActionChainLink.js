@@ -2,11 +2,10 @@ const root = require('../../../index');
 const assert = require('chai').assert;
 
 
-
 const ActionChainLink	= root.Oyster.Actions.ActionChainLink;
 
 
-suite.only('ActionChainLink', () => 
+suite('ActionChainLink', () => 
 {
 	test('Consturctor', () =>
 	{

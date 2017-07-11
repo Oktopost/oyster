@@ -12,7 +12,8 @@
   "dependencies": {
     "oktopost-classy": "^1.0.3",
     "oktopost-namespace": "^2.0.0",
-    "oktopost-plankton": "^1.1.0"
+    "oktopost-plankton": "^1.1.0",
+    "oktopost-sea-route": "^1.0.2"
   },
   "devDependencies": {
     "chai": "^3.5.0",

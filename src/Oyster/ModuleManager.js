@@ -1,4 +1,4 @@
-namespace('Oyster.Modules', function (root)
+namespace('Oyster', function (root)
 {
 	var classify 	= root.Classy.classify;
 	var is			= root.Plankton.is;
@@ -9,7 +9,7 @@ namespace('Oyster.Modules', function (root)
 	
 
 	/**
-	 * @class Oyster.Modules.Manager
+	 * @class Oyster.ModuleManager
 	 * @alias Manager
 	 * 
 	 * @property {*} _modules
@@ -17,7 +17,7 @@ namespace('Oyster.Modules', function (root)
 	 * 
 	 * @constructor
 	 */
-	function Manager()
+	function ModuleManager()
 	{
 		classify(this);
 		
