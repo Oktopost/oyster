@@ -1,21 +1,23 @@
 {
+  "name": "oktopost-oyster",
+  "version": "0.0.1",
+  "description": "",
+  "main": "index.js",
   "scripts": {
-    "test": "mocha"
+    "test": "mocha",
+    "test-cover": "./node_modules/istanbul/lib/cli.js cover ./node_modules/mocha/bin/_mocha"
   },
+  "author": "",
+  "license": "MIT",
   "dependencies": {
-    "fs": "0.0.1-security",
-    "gulp": "^3.9.1",
-    "gulp-concat": "^2.6.1",
-    "gulp-declare": "^0.3.0",
-    "gulp-handlebars": "^4.0.0",
-    "gulp-wrap": "^0.13.0",
-    "merge-stream": "^1.0.1",
-    "path": "^0.12.7",
-    "plankton": "^0.1.3",
-    "plankton-text": "0.0.3"
+    "oktopost-classy": "^1.0.3",
+    "oktopost-namespace": "^2.0.0",
+    "oktopost-plankton": "^1.1.0"
   },
   "devDependencies": {
     "chai": "^3.5.0",
-    "mocha": "^3.2.0"
+    "mocha": "^3.2.0",
+    "istanbul": "^0.4.5",
+    "coveralls": "2.10.0"
   }
 }

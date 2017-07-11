@@ -7,13 +7,13 @@
 # OS Folders
 .DS_Store
 
+# Node
+/node_modules/*
+
+# Test results
+/coverage
+
 # Local files
 npm-debug.log
-test.js
-test/all.browserify
-
-
-/bin
-vendor/
-node_modules/
-build/
+/.namespace.json
+/test.js
