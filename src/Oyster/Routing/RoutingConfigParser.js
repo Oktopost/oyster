@@ -61,15 +61,12 @@ namespace('Oyster.Routing', function (root)
 		/**
 		 * @param {*} manager
 		 * @param {*} config
-		 * @param {*=} preDefinedParams
+		 * @param {RoutesBuilder} builder
 		 */
-		parse: function (manager, config, preDefinedParams)
+		parse: function (manager, config, builder)
 		{
 			var object	= {};
-			var builder = new RoutesBuilder();
 			var cursor	= new ParsingCursor(manager, builder);
-			
-			builder.addParams(preDefinedParams || {});
 			
 			RoutingConfigParser._parse(cursor, config, object);
 			

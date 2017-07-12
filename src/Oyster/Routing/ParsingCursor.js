@@ -43,7 +43,7 @@ namespace('Oyster.Routing', function (root)
 	 */
 	ParsingCursor.prototype._createActionRoute = function (route) 
 	{
-		var actionRoute = new ActionRoute(this._manager);
+		var actionRoute = new ActionRoute();
 		var names = [];
 		
 		actionRoute.setActions(this._actions, this._paramNames.concat());

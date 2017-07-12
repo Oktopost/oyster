@@ -5,26 +5,34 @@ const assert = require('chai').assert;
 const ActionRoute			= root.Oyster.Routing.ActionRoute;
 const RoutingConfigParser	= root.Oyster.Routing.RoutingConfigParser;
 
+const RoutesBuilder			= root.SeaRoute.RoutesBuilder;
+
 
 suite('RoutingConfigParser', () => 
 {
 	suite('parse', () => 
 	{
+		function builder() 
+		{
+			return new RoutesBuilder();
+		}
+		
+		
 		test('empty config, return empty result', () => 
 		{
-			var res = RoutingConfigParser.parse({}, {});
+			var res = RoutingConfigParser.parse({}, {}, builder());
 			assert.deepEqual(res, {});
 		});
 		
 		test('empty config with deep levels, return empty result', () => 
 		{
-			var res = RoutingConfigParser.parse({}, { a: {}, b: {c: {}}}, {});
+			var res = RoutingConfigParser.parse({}, { a: {}, b: {c: {}}}, builder());
 			assert.deepEqual(res, { a: {}, b: { c: {} } });
 		});
 		
 		test('single route defined', () => 
 		{
-			var res = RoutingConfigParser.parse({}, { $: { action: () => {}, path: '' } }, {});
+			var res = RoutingConfigParser.parse({}, { $: { action: () => {}, path: '' } }, builder());
 			
 			assert.instanceOf(res['$'], ActionRoute);
 			assert.instanceOf(res['$'], ActionRoute);
@@ -32,7 +40,7 @@ suite('RoutingConfigParser', () =>
 		
 		test('single route defined using the "route" keyword', () => 
 		{
-			var res = RoutingConfigParser.parse({}, { route: { action: () => {}, path: '' } }, {});
+			var res = RoutingConfigParser.parse({}, { route: { action: () => {}, path: '' } }, builder());
 			
 			assert.instanceOf(res['$'], ActionRoute);
 			assert.instanceOf(res['$'], ActionRoute);
@@ -57,7 +65,7 @@ suite('RoutingConfigParser', () =>
 						},
 					}
 				}, 
-				{});
+				builder());
 			
 			assert.instanceOf(res['$'], ActionRoute);
 			assert.instanceOf(res['b']['$'], ActionRoute);
@@ -84,7 +92,7 @@ suite('RoutingConfigParser', () =>
 						},
 					}
 				}, 
-				{});
+				builder());
 			
 			assert.instanceOf(res['b']['$'], ActionRoute);
 			assert.instanceOf(res['c']['$'], ActionRoute);
@@ -127,7 +135,7 @@ suite('RoutingConfigParser', () =>
 						}
 					}
 				}, 
-				{});
+				builder());
 			
 			assert.instanceOf(res['b']['$'], ActionRoute);
 			assert.instanceOf(res['b']['bb']['$'], ActionRoute);

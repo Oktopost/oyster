@@ -75,6 +75,20 @@ suite('ActionChain', () =>
 	
 	suite('update', () =>
 	{
+		test('navigator passed to Action', () => 
+		{
+			var isCalled = false;
+			var subject = new ActionChain({ goto: () => { isCalled = true; } });
+			
+			var route = newActionRoute();
+			
+			subject.update(route, {});
+			subject.chain()[0].action().navigate('a', {});
+			
+			assert.isTrue(isCalled);
+		});
+		
+		
 		suite('Chain State', () => 
 		{
 			test('New params set', () => 

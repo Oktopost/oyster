@@ -24,7 +24,7 @@ namespace('Oyster.Actions', function (root)
 	
 	
 	/**
-	 * @returns {Oyster.Action}
+	 * @returns {Action}
 	 */
 	ActionChainLink.prototype.action = function ()
 	{

@@ -9,17 +9,21 @@ namespace('Oyster.Actions', function (root)
 	
 	
 	/**
-	 * @class Oyster.Actions.ActionChain
+	 * @class {Oyster.Actions.ActionChain}
 	 * @alias {ActionChain}
 	 * 
+	 * @property {Navigator}			_navigator
 	 * @property {[ActionChainLink]}	_chain
 	 * @property {ActionRoute}			_route
 	 * @property {*}					_params
 	 * 
+	 * @param {Navigator} navigator
+	 * 
 	 * @constructor
 	 */
-	function ActionChain()
+	function ActionChain(navigator)
 	{
+		this._navigator	= navigator;
 		this._chain		= [];
 		this._params	= {};
 		this._route		= null;
@@ -118,6 +122,7 @@ namespace('Oyster.Actions', function (root)
 			var action = new creators[index]();
 			var chainLink = new ActionChainLink(action); 
 			
+			action.setNavigator(this._navigator);
 			target.mount.push(chainLink);
 		}
 	};
