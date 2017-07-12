@@ -25,7 +25,7 @@ suite('ActionChainLoader', () =>
 					return {
 						preDestroy: (p1, p2) => invoked.push(['preDestroy',		'a' + i, p1, p2]),
 						initialize: (p1, p2) => invoked.push(['initialize',		'a' + i, p1, p2]),
-						childUpdate:(p1, p2) => invoked.push(['childUpdate',	'a' + i, p1, p2]),
+						refresh:	(p1, p2) => invoked.push(['refresh',		'a' + i, p1, p2]),
 						update:		(p1, p2) => invoked.push(['update',			'a' + i, p1, p2]),
 						activate:	(p1, p2) => invoked.push(['activate',		'a' + i, p1, p2]),
 						execute:	(p1, p2) => invoked.push(['execute',		'a' + i, p1, p2]),
@@ -67,7 +67,7 @@ suite('ActionChainLoader', () =>
 	test('correct methods invoked', () => 
 	{
 		assertCalled(['preDestroy'], 'invokePreDestroy');
-		assertCalled(['childUpdate'], 'invokeChildUpdate');
+		assertCalled(['refresh'], 'invokeRefresh');
 		assertCalled(['initialize'], 'invokeInitialize');
 		assertCalled(['activate', 'execute'], 'invokeActivate');
 		assertCalled(['update', 'execute'], 'invokeUpdate');
@@ -85,7 +85,7 @@ suite('ActionChainLoader', () =>
 			
 			ActionChainLoader._errorHandler = function () { isCalled = true; };
 			
-			ActionChainLoader.invokeChildUpdate([{ action: () => { return {} } }], {}, {});
+			ActionChainLoader.invokeRefresh([{ action: () => { return {} } }], {}, {});
 			
 			assert.isFalse(isCalled);
 		}
@@ -105,10 +105,10 @@ suite('ActionChainLoader', () =>
 			
 			ActionChainLoader._errorHandler = function () { isCalled = true; };
 			
-			ActionChainLoader.invokeChildUpdate(
+			ActionChainLoader.invokeRefresh(
 				[
 					{ action: () => { return { 
-						childUpdate: () => { throw 'FAILED'; }
+						refresh: () => { throw 'FAILED'; }
 					} } }
 				],
 				{}, {});
@@ -131,10 +131,10 @@ suite('ActionChainLoader', () =>
 			
 			ActionChainLoader._errorHandler = function (a, b, name) { calledName = name; };
 			
-			ActionChainLoader.invokeChildUpdate(
+			ActionChainLoader.invokeRefresh(
 				[
 					{ action: () => { return { 
-						childUpdate: () => { throw 'FAILED'; },
+						refresh: () => { throw 'FAILED'; },
 						constructor: { name: () => 'a' }
 					} } }
 				],
@@ -142,10 +142,10 @@ suite('ActionChainLoader', () =>
 			
 			assert.equal(calledName, 'a');
 			
-			ActionChainLoader.invokeChildUpdate(
+			ActionChainLoader.invokeRefresh(
 				[
 					{ action: () => { return { 
-						childUpdate: () => { throw 'FAILED'; },
+						refresh: () => { throw 'FAILED'; },
 						name: () => 'b'
 					} } }
 				],
@@ -153,10 +153,10 @@ suite('ActionChainLoader', () =>
 			
 			assert.equal(calledName, 'b');
 			
-			ActionChainLoader.invokeChildUpdate(
+			ActionChainLoader.invokeRefresh(
 				[
 					{ action: () => { return { 
-						childUpdate: () => { throw 'FAILED'; },
+						refresh: () => { throw 'FAILED'; },
 					} } }
 				],
 				{}, {});
@@ -179,13 +179,13 @@ suite('ActionChainLoader', () =>
 			
 			ActionChainLoader._errorHandler = function () {};
 			
-			ActionChainLoader.invokeChildUpdate(
+			ActionChainLoader.invokeRefresh(
 				[
 					{ action: () => { return { 
-						childUpdate: () => { throw 'FAILED'; }
+						refresh: () => { throw 'FAILED'; }
 					} } },
 					{ action: () => { return { 
-						childUpdate: () => { isCalled = true; } 
+						refresh: () => { isCalled = true; } 
 					} } }
 				],
 				{}, {});

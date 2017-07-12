@@ -75,11 +75,11 @@ namespace('Oyster.Actions', function (root)
 		 * @param {*} prevParams
 		 * @private
 		 */
-		invokeChildUpdate: function (actions, params, prevParams)
+		invokeRefresh: function (actions, params, prevParams)
 		{
 			foreach(actions, function (item)
 			{
-				ActionChainLoader._invokeMethod(item.action(), 'childUpdate', [params, prevParams]);
+				ActionChainLoader._invokeMethod(item.action(), 'refresh', [params, prevParams]);
 			});
 		},
 		

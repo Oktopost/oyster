@@ -1,6 +1,7 @@
 namespace('Oyster.Actions', function (root)
 {
 	var is		= root.Plankton.is;
+	var obj		= root.Plankton.obj;
 	var foreach	= root.Plankton.foreach;
 	
 	var ActionChainLink		= root.Oyster.Actions.ActionChainLink;
@@ -30,9 +31,9 @@ namespace('Oyster.Actions', function (root)
 	 * @param {{}} target
 	 * @private
 	 */
-	Action.prototype._findModified = function (actionRoute, target)
+	ActionChain.prototype._findModified = function (actionRoute, target)
 	{
-		var prevActionConstructor = this._route || [];
+		var prevActionConstructor = (this._route ? this._route.actions() : []);
 		var currActionConstructor = actionRoute.actions();
 		var maxIndex = Math.min(prevActionConstructor.length, currActionConstructor.length);
 		
@@ -56,11 +57,11 @@ namespace('Oyster.Actions', function (root)
 		var foundIndex;
 		var checked = {};
 		var found = false;
-		var paramNames = this._route.params();
+		var paramNames = (this._route ? this._route.params() : []);
 		
 		for (foundIndex = 0; foundIndex < target.modified.length; foundIndex++)
 		{
-			foreach(paramNames, function (paramName) 
+			foreach(paramNames[foundIndex], function (paramName) 
 			{
 				if (is(checked[paramName]))
 				{
@@ -80,7 +81,7 @@ namespace('Oyster.Actions', function (root)
 			if (found) break;
 		}
 		
-		if (foundIndex === target.modified.length)
+		if (foundIndex === 0)
 			target.unmodified = [];
 		else
 			target.unmodified = target.modified.splice(0, foundIndex);
@@ -90,13 +91,13 @@ namespace('Oyster.Actions', function (root)
 	 * @param {{}} target
 	 * @private
 	 */
-	Action.prototype._findUnmounted = function (target)
+	ActionChain.prototype._findUnmounted = function (target)
 	{
 		var length = target.modified.length + target.unmodified.length;
 		
 		target.unmount = this._chain.slice(
 			length, 
-			this._chain.length - length
+			this._chain.length
 		);
 	};
 	
@@ -105,7 +106,7 @@ namespace('Oyster.Actions', function (root)
 	 * @param {{}} target
 	 * @private
 	 */
-	Action.prototype._findMounted = function (actionRoute, target)
+	ActionChain.prototype._findMounted = function (actionRoute, target)
 	{
 		var length = target.modified.length + target.unmodified.length;
 		var creators = actionRoute.actions();
@@ -144,8 +145,8 @@ namespace('Oyster.Actions', function (root)
 			{
 				ActionChainLink.updateRelations(
 					item,
-					(index === 0 ? null : this._chain[index - 1]),
-					(index === last ? null : this._chain[index + 1])
+					(index === last ? null : this._chain[index + 1]),
+					(index === 0 ? null : this._chain[index - 1])
 				);
 				
 				item.action().setParams(params);
@@ -188,19 +189,44 @@ namespace('Oyster.Actions', function (root)
 	ActionChain.prototype.update = function (actionRoute, params)
 	{
 		var target = this._buildChangesObject(actionRoute, params);
-		var prevParams = this._params; 
+		var prevParams = obj.copy(this._params); 
 		
 		ActionChainLoader.invokePreDestroy(target.unmount, params, this._params);
 		
 		this._unmount(target.unmount);
-		this._updateChainState(target, params, actionRoute.route());
+		this._updateChainState(target, params, actionRoute);
 		
-		ActionChainLoader.invokeChildUpdate(target.unmodified, this._params, prevParams);
-		ActionChainLoader.invokeUpdate(target.modified, this._params, prevParams);
 		ActionChainLoader.invokeInitialize(target.mount, this._params, prevParams);
+		ActionChainLoader.invokeRefresh(target.unmodified, this._params, prevParams);
+		ActionChainLoader.invokeUpdate(target.modified, this._params, prevParams);
 		ActionChainLoader.invokeActivate(target.mount, this._params, prevParams);
 		
 		ActionChainLoader.invokeDestroy(target.unmount, this._params, prevParams);
+	};
+	
+	
+	/**
+	 * @return {Array.<ActionChainLink>|null}
+	 */
+	ActionChain.prototype.chain = function ()
+	{
+		return this._chain;
+	};
+	
+	/**
+	 * @return {ActionRoute|null}
+	 */
+	ActionChain.prototype.route = function ()
+	{
+		return this._route;
+	};
+	
+	/**
+	 * @return {*}
+	 */
+	ActionChain.prototype.params = function ()
+	{
+		return this._params;
 	};
 	
 	

@@ -5,7 +5,7 @@ namespace('Oyster.Routing', function (root)
 	 * @alias ActionRoute
 	 * 
 	 * @property {SeaRoute.Route.Route} _route
-	 * @property {[string]}				_params
+	 * @property {[[string]]}			_params
 	 * @property {[callback]}			_actions
 	 * 
 	 * @constructor
