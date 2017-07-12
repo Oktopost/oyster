@@ -106,4 +106,21 @@ suite('LoadSequence', () =>
 		assert.equal(true, diffMethodCalled);
 		assert.equal(true, sameMethodCalled);
 	});
+	
+	
+	test('error handling sanity', () => 
+	{
+		var original = console.error;
+		var subject = new LoadSequence();
+		
+		try
+		{
+			console.error = () => {};
+			subject._handleException('a', 'b', 'c');
+		}
+		finally 
+		{
+			console.error = original;
+		}
+	});
 });

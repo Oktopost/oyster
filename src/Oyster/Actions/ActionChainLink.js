@@ -1,30 +1,38 @@
 namespace('Oyster.Actions', function (root)
 {
-	var classify 	= root.Classy.classify;
-	
-
 	/**
-	 * @class Oyster.Actions.ActionChainLink
+	 * @class {Oyster.Actions.ActionChainLink}
 	 * @alias {ActionChainLink}
 	 * 
-	 * @property {Action|null} _child
-	 * @property {Action|null} _parent
-	 * @property {boolean} _isMounted
+	 * @property {ActionChainLink}	_child
+	 * @property {ActionChainLink}	_parent
+	 * @property {Oyster.Action}	_action
+	 * @property {boolean}			_isMounted
 	 * 
+	 * @param {Action} action
 	 * @constructor
 	 */
-	function ActionChainLink()
+	function ActionChainLink(action)
 	{
-		classify(this);
-		
-		this._isMounted	= true;
 		this._child		= null;
 		this._parent	= null;
+		this._action	= action;
+		this._isMounted	= false;
+		
+		action.setChainLink(this);
 	}
 	
 	
 	/**
-	 * @returns {Action|null}
+	 * @returns {Oyster.Action}
+	 */
+	ActionChainLink.prototype.action = function ()
+	{
+		return this._action;
+	};
+	
+	/**
+	 * @returns {ActionChainLink|null}
 	 */
 	ActionChainLink.prototype.child = function ()
 	{
@@ -32,7 +40,7 @@ namespace('Oyster.Actions', function (root)
 	};
 	
 	/**
-	 * @returns {Action|null}
+	 * @returns {ActionChainLink|null}
 	 */
 	ActionChainLink.prototype.parent = function ()
 	{
@@ -40,23 +48,39 @@ namespace('Oyster.Actions', function (root)
 	};
 	
 	/**
+	 * @returns {Oyster.Action|null}
+	 */
+	ActionChainLink.prototype.childAction = function ()
+	{
+		return (this._child === null ? null : this._child.action());
+	};
+	
+	/**
 	 * @returns {Action|null}
+	 */
+	ActionChainLink.prototype.parentAction = function ()
+	{
+		return (this._parent === null ? null : this._parent.action());
+	};
+	
+	/**
+	 * @returns {boolean}
 	 */
 	ActionChainLink.prototype.hasChild = function ()
 	{
-		return this._child !== null;
+		return (this._child !== null);
 	};
 	
 	/**
-	 * @returns {Action|null}
+	 * @returns {boolean}
 	 */
 	ActionChainLink.prototype.hasParent = function ()
 	{
-		return this._parent !== null;
+		return (this._parent !== null);
 	};
 	
 	/**
-	 * @returns {Action|null}
+	 * @returns {boolean}
 	 */
 	ActionChainLink.prototype.isMounted = function ()
 	{
@@ -76,13 +100,14 @@ namespace('Oyster.Actions', function (root)
 	
 	/**
 	 * @param {ActionChainLink} link
-	 * @param {Action} child
-	 * @param {Action} parent
+	 * @param {ActionChainLink} child
+	 * @param {ActionChainLink} parent
 	 */
 	ActionChainLink.updateRelations = function (link, child, parent)
 	{
 		link._child = child;
 		link._parent = parent;
+		link._isMounted = true;
 	};
 	
 	
