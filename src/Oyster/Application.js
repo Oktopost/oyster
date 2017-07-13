@@ -48,8 +48,9 @@ namespace('Oyster', function (root)
 		navigationModule.handleMiss(url);
 	};
 	
+	
 	/**
-	 * @return {{addPredefinedParams: addPredefinedParams, addRoutes: (ActionsManager.setupRoutes|*), handle: handle}}
+	 * @return {{addPredefinedParams: addPredefinedParams, addRoutes: (ActionsManager.setupRoutes|*)}}
 	 */
 	Application.prototype.routing = function ()
 	{
@@ -58,7 +59,7 @@ namespace('Oyster', function (root)
 	
 	/**
 	 * @param {string|*=} config
-	 * @return {*}
+	 * @return {ModuleManager|Application|null}
 	 */
 	Application.prototype.modules = function (config)
 	{
@@ -86,7 +87,7 @@ namespace('Oyster', function (root)
 	{
 		this._modules.onLoaded((function ()
 			{
-				this._actions.handleURL(window.location.href);
+				this._actions.handleURL(window.location.pathname);
 			})
 			.bind(this));
 	};

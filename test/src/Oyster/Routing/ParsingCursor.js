@@ -2,17 +2,25 @@ const root = require('../../../index');
 const assert = require('chai').assert;
 
 
-const ActionRoute	= root.Oyster.Routing.ActionRoute;
-const ParsingCursor = root.Oyster.Routing.ParsingCursor;
+const obj				= root.Plankton.obj;
+const ActionRoute		= root.Oyster.Routing.ActionRoute;
+const ParsingCursor		= root.Oyster.Routing.ParsingCursor;
+const ActionsManager	= root.Oyster.ActionsManager;
 
 
 suite('ParsingCursor', () => 
 {
+	function manager(mixin)
+	{
+		return obj.mix(new ActionsManager(() => {}, () => {}), mixin || {});
+	}
+	
+	
 	suite('parseRouteConfig', () => 
 	{
 		test('Path Build correctly', () => 
 		{
-			var subject = new ParsingCursor({});
+			var subject = new ParsingCursor(manager());
 			
 			subject.parseRouteConfig({ action: {}, path: '/a' });
 			subject.parseRouteConfig({ action: {}, path: 'b/' });
@@ -31,13 +39,13 @@ suite('ParsingCursor', () =>
 			var action;
 			var params;
 			
-			var subject = new ParsingCursor({
+			var subject = new ParsingCursor(manager({
 				handle: (a, b) =>
 				{
 					action = a;
 					params = b;
 				}
-			});
+			}));
 			
 			var res = subject.parseRouteConfig({ action: {}, path: '/a' });
 			
@@ -51,7 +59,7 @@ suite('ParsingCursor', () =>
 		{
 			test('ActionRoute Returned', () => 
 			{
-				var subject = new ParsingCursor({});
+				var subject = new ParsingCursor(manager());
 				var res = subject.parseRouteConfig({
 					action: {},
 					path: 'a'
@@ -62,7 +70,7 @@ suite('ParsingCursor', () =>
 			
 			test('Action passed to ActionRoute', () => 
 			{
-				var subject = new ParsingCursor({});
+				var subject = new ParsingCursor(manager());
 				var action = function() {};
 				
 				var res = subject.parseRouteConfig({
@@ -75,7 +83,7 @@ suite('ParsingCursor', () =>
 			
 			test('Route passed to ActionRoute', () => 
 			{
-				var subject = new ParsingCursor({});
+				var subject = new ParsingCursor(manager());
 				var action = function() {};
 				
 				var res = subject.parseRouteConfig({
@@ -88,7 +96,7 @@ suite('ParsingCursor', () =>
 			
 			test('Params passed to ActionRoute', () => 
 			{
-				var subject = new ParsingCursor({});
+				var subject = new ParsingCursor(manager());
 				var action = function() {};
 				
 				var res = subject.parseRouteConfig({
@@ -105,7 +113,7 @@ suite('ParsingCursor', () =>
 		{
 			test('ActionRoute Returned', () => 
 			{
-				var subject = new ParsingCursor({});
+				var subject = new ParsingCursor(manager());
 				
 				subject.parseRouteConfig({
 					action: {},
@@ -122,7 +130,7 @@ suite('ParsingCursor', () =>
 			
 			test('Action passed to ActionRoute', () => 
 			{
-				var subject = new ParsingCursor({});
+				var subject = new ParsingCursor(manager());
 				var action1 = function() {};
 				var action2 = function() {};
 				
@@ -141,7 +149,7 @@ suite('ParsingCursor', () =>
 			
 			test('Route passed to ActionRoute', () => 
 			{
-				var subject = new ParsingCursor({});
+				var subject = new ParsingCursor(manager());
 				var action = function() {};
 				
 				subject.parseRouteConfig({
@@ -159,7 +167,7 @@ suite('ParsingCursor', () =>
 			
 			test('Params passed to ActionRoute', () => 
 			{
-				var subject = new ParsingCursor({});
+				var subject = new ParsingCursor(manager());
 				var action = function() {};
 				
 				subject.parseRouteConfig({
@@ -183,7 +191,7 @@ suite('ParsingCursor', () =>
 	{
 		test('ActionRoute reset correctly', () => 
 		{
-			var subject = new ParsingCursor({});
+			var subject = new ParsingCursor(manager());
 			
 			subject.parseRouteConfig({
 				action: {},
@@ -203,7 +211,7 @@ suite('ParsingCursor', () =>
 		
 		test('Actions reset correctly', () => 
 		{
-			var subject = new ParsingCursor({});
+			var subject = new ParsingCursor(manager());
 			var action1 = function() {};
 			var action2 = function() {};
 			var action3 = function() {};
@@ -226,7 +234,7 @@ suite('ParsingCursor', () =>
 		
 		test('Path reset correctly', () => 
 		{
-			var subject = new ParsingCursor({});
+			var subject = new ParsingCursor(manager());
 			var action = function() {};
 			
 			subject.parseRouteConfig({
@@ -247,7 +255,7 @@ suite('ParsingCursor', () =>
 		
 		test('Params reset correctly', () => 
 		{
-			var subject = new ParsingCursor({});
+			var subject = new ParsingCursor(manager());
 			var action = function() {};
 			
 			subject.parseRouteConfig({

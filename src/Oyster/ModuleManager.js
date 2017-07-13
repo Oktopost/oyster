@@ -26,7 +26,7 @@ namespace('Oyster', function (root)
 		
 		this._modules = {};
 		this._onCompleteCallbacks = [];
-		this._loader = new Loader(this._register, this._deRegister);
+		this._loader = new Loader(this._register, this._deRegister, this._invokeOnComplete);
 	}
 	
 	/**
@@ -37,8 +37,8 @@ namespace('Oyster', function (root)
 	ModuleManager.prototype._extractName = function (element)
 	{
 		if (is.string(element)) return element;
-		else if (is.string(element.name)) return element.name;
-		else if (is.function(element.name)) return element.name();
+		else if (is.string(element.moduleName)) return element.moduleName;
+		else if (is.function(element.moduleName)) return element.moduleName();
 		else return element.toString();
 	};
 	
@@ -48,7 +48,7 @@ namespace('Oyster', function (root)
 	 */
 	ModuleManager.prototype._register = function (module)
 	{
-		var name = module.module().name();
+		var name = module.control().name();
 		
 		if (is(this._modules[name]))
 			throw new Error('Module with the name ' + name + ' is already registered!');
@@ -62,7 +62,7 @@ namespace('Oyster', function (root)
 	 */
 	ModuleManager.prototype._deRegister = function (module)
 	{
-		var name = module.module().name();
+		var name = module.control().name();
 		
 		if (!is(this._modules[name]))
 			throw new Error('Module with the name ' + name + ' is not registered!');
@@ -100,13 +100,8 @@ namespace('Oyster', function (root)
 		target = ModuleBuilder.get(this, target, extra);
 		target = array(target);
 		
-		// Make sure each call to add treated as a separate load group.
-		if (!is.array(array.first(target)))
-		{
-			target = [target];
-		}
-		
 		this._loader.load(target);
+		
 		return this;
 	};
 

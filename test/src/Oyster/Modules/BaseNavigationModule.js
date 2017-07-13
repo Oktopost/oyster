@@ -15,6 +15,6 @@ suite('BaseNavigationModule', () =>
 		subject.navigate();
 		subject.handleMiss();
 		
-		assert.equal(BaseNavigationModule.moduleName(), OysterModules.NavigationModule);
+		assert.equal(BaseNavigationModule.prototype.moduleName(), OysterModules.NavigationModule);
 	});
 });

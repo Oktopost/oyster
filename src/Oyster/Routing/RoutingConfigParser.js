@@ -3,7 +3,6 @@ namespace('Oyster.Routing', function (root)
 	var is			= root.Plankton.is;
 	var foreach		= root.Plankton.foreach;
 	
-	var RoutesBuilder	= root.SeaRoute.RoutesBuilder;
 	var ParsingCursor	= root.Oyster.Routing.ParsingCursor;
 	
 	
@@ -14,7 +13,7 @@ namespace('Oyster.Routing', function (root)
 	var RoutingConfigParser = {
 		
 		/**
-		 * @param {Oyster.Routing.ParsingCursor} cursor
+		 * @param {ParsingCursor} cursor
 		 * @param {*} config
 		 * @param {*} object
 		 * @return {boolean}
@@ -46,7 +45,7 @@ namespace('Oyster.Routing', function (root)
 		 */
 		_parse: function (cursor, config, object)
 		{
-			var pop = RoutingConfigParser._tryExtractRoute(cursor, config, object);
+			var found = RoutingConfigParser._tryExtractRoute(cursor, config, object);
 			
 			foreach.pair (config, function (name, value) 
 			{
@@ -54,14 +53,14 @@ namespace('Oyster.Routing', function (root)
 				RoutingConfigParser._parse(cursor, value, object[name]);
 			});
 			
-			if (pop) cursor.pop();
+			if (found) cursor.pop();
 		},
 		
 		
 		/**
-		 * @param {*} manager
+		 * @param {ActionsManager} manager
 		 * @param {*} config
-		 * @param {RoutesBuilder} builder
+		 * @param {RoutesBuilder=} builder
 		 */
 		parse: function (manager, config, builder)
 		{

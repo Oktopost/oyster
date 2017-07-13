@@ -28,6 +28,8 @@ namespace('Oyster.Modules', function (root)
 		return OysterModules.NavigationModule; 
 	};
 	
+	BaseNavigationModule.prototype.moduleName = BaseNavigationModule.moduleName;
+	
 	
 	this.BaseNavigationModule = BaseNavigationModule;
 });

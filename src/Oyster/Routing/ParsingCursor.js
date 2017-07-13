@@ -16,12 +16,11 @@ namespace('Oyster.Routing', function (root)
 	 * @property {[string]}		_pathParts
 	 * @property {[{}]}			_paramsConfig
 	 * 
-	 * @property {*} 						_manager
+	 * @property {ActionsManager}			_manager
 	 * @property {SeaRoute.RoutesBuilder}	_builder
-	 * TODO
 	 * 
-	 * @param {*} manager
-	 * @param {SeaRoute.RoutesBuilder=} builder
+	 * @param {ActionsManager}			manager
+	 * @param {SeaRoute.RoutesBuilder=}	builder
 	 * @constructor
 	 */
 	function ParsingCursor(manager, builder)
@@ -44,7 +43,6 @@ namespace('Oyster.Routing', function (root)
 	ParsingCursor.prototype._createActionRoute = function (route) 
 	{
 		var actionRoute = new ActionRoute();
-		var names = [];
 		
 		actionRoute.setActions(this._actions, this._paramNames.concat());
 		actionRoute.setRoute(route);
@@ -117,6 +115,7 @@ namespace('Oyster.Routing', function (root)
 		
 		// Create the route and push it to the top of the stack. This will extract the route parameters.
 		route = this._builder.create(routeConfig);
+		this._manager.router().appendRoutes(route);
 		this._paramNames.push(route.paramNames());
 		
 		// Set the variable 'action' so that it's used in the callback.

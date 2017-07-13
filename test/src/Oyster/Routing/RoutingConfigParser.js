@@ -2,14 +2,23 @@ const root = require('../../../index');
 const assert = require('chai').assert;
 
 
+const obj = root.Plankton.obj;
+
 const ActionRoute			= root.Oyster.Routing.ActionRoute;
 const RoutingConfigParser	= root.Oyster.Routing.RoutingConfigParser;
+const ActionsManager		= root.Oyster.ActionsManager;
 
 const RoutesBuilder			= root.SeaRoute.RoutesBuilder;
 
 
 suite('RoutingConfigParser', () => 
 {
+	function manager(mixin)
+	{
+		return obj.mix(new ActionsManager(() => {}, () => {}), mixin || {});
+	}
+	
+	
 	suite('parse', () => 
 	{
 		function builder() 
@@ -20,19 +29,19 @@ suite('RoutingConfigParser', () =>
 		
 		test('empty config, return empty result', () => 
 		{
-			var res = RoutingConfigParser.parse({}, {}, builder());
+			var res = RoutingConfigParser.parse(manager(), {}, builder());
 			assert.deepEqual(res, {});
 		});
 		
 		test('empty config with deep levels, return empty result', () => 
 		{
-			var res = RoutingConfigParser.parse({}, { a: {}, b: {c: {}}}, builder());
+			var res = RoutingConfigParser.parse(manager(), { a: {}, b: {c: {}}}, builder());
 			assert.deepEqual(res, { a: {}, b: { c: {} } });
 		});
 		
 		test('single route defined', () => 
 		{
-			var res = RoutingConfigParser.parse({}, { $: { action: () => {}, path: '' } }, builder());
+			var res = RoutingConfigParser.parse(manager(), { $: { action: () => {}, path: '' } }, builder());
 			
 			assert.instanceOf(res['$'], ActionRoute);
 			assert.instanceOf(res['$'], ActionRoute);
@@ -40,7 +49,7 @@ suite('RoutingConfigParser', () =>
 		
 		test('single route defined using the "route" keyword', () => 
 		{
-			var res = RoutingConfigParser.parse({}, { route: { action: () => {}, path: '' } }, builder());
+			var res = RoutingConfigParser.parse(manager(), { route: { action: () => {}, path: '' } }, builder());
 			
 			assert.instanceOf(res['$'], ActionRoute);
 			assert.instanceOf(res['$'], ActionRoute);
@@ -48,7 +57,7 @@ suite('RoutingConfigParser', () =>
 		
 		test('route with children', () => 
 		{
-			var res = RoutingConfigParser.parse({}, 
+			var res = RoutingConfigParser.parse(manager(), 
 				{
 					$: 
 					{ 
@@ -73,7 +82,7 @@ suite('RoutingConfigParser', () =>
 		
 		test('number of routes', () => 
 		{
-			var res = RoutingConfigParser.parse({}, 
+			var res = RoutingConfigParser.parse(manager(), 
 				{
 					b:
 					{
@@ -100,7 +109,7 @@ suite('RoutingConfigParser', () =>
 		
 		test('number of routes, correct paths used', () => 
 		{
-			var res = RoutingConfigParser.parse({}, 
+			var res = RoutingConfigParser.parse(manager(), 
 				{
 					b:
 					{

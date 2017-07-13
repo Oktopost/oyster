@@ -12,7 +12,7 @@ namespace('Oyster.Routing', function (root)
 	 * @alias {Navigator}
 	 * 
 	 * @property {SeaRoute.Router} _router
-	 * @property {callback} _navigationOrder
+	 * @property {function} _navigationOrder
 	 * 
 	 * @param {SeaRoute.Router} router
 	 * 

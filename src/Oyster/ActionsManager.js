@@ -34,6 +34,14 @@ namespace('Oyster', function (root)
 	}
 	
 	/**
+	 * @return {SeaRoute.Router}
+	 */
+	ActionsManager.prototype.router = function ()
+	{
+		return this._router;
+	};
+	
+	/**
 	 * @param {ActionRoute} actionRoute
 	 * @param {*} params
 	 */
@@ -58,13 +66,24 @@ namespace('Oyster', function (root)
 		this._builder.addParams(params);
 	};
 	
+	/**
+	 * @param {*} config
+	 */
 	ActionsManager.prototype.setupRoutes = function (config)
 	{
 		return RoutingConfigParser.parse(this, config, this._builder);
 	};
 	
 	/**
-	 * @return {{addPredefinedParams: addPredefinedParams, addRoutes: (ActionsManager.setupRoutes|*), handle: handle}}
+	 * @return {Navigator}
+	 */
+	ActionsManager.prototype.navigator = function ()
+	{
+		return this._navigator;
+	};
+	
+	/**
+	 * @return {{addPredefinedParams: addPredefinedParams, addRoutes: (ActionsManager.setupRoutes|*)}}
 	 */
 	ActionsManager.prototype.setup = function ()
 	{
