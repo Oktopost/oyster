@@ -23,7 +23,7 @@ namespace('Oyster.Modules', function (root)
 	BaseNavigationModule.prototype.handleMiss = function (url) {};
 	
 	
-	BaseNavigationModule.name = function () 
+	BaseNavigationModule.moduleName = function () 
 	{
 		return OysterModules.NavigationModule; 
 	};
