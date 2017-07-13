@@ -8,7 +8,7 @@ namespace('Oyster.Modules', function (root)
 
 	/**
 	 * @name {Oyster.Modules.BaseNavigationModule}
-	 * @alias {NavigationModule}
+	 * @alias {BaseNavigationModule}
 	 * 
 	 * @extends {Oyster.Module}
 	 */
