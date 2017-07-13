@@ -30,7 +30,7 @@ namespace('Oyster', function (root)
 	/**
 	 * @returns {ModuleController}
 	 */
-	Module.prototype.module = function ()
+	Module.prototype.control = function ()
 	{
 		return this._controller;
 	};

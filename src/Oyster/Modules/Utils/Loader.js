@@ -8,12 +8,12 @@ namespace('Oyster.Modules.Utils', function (root)
 	var array		= root.Plankton.array;
 	var foreach		= root.Plankton.foreach;
 	
-	var LoadSequence = Oyster.Modules.Utils.LoadSequence;
+	var LoadSequence = root.Oyster.Modules.Utils.LoadSequence;
 
 
 	/**
-	 * @name Oyster.Modules.Utils.Loader
-	 * @alias Loader
+	 * @name {Oyster.Modules.Utils.Loader}
+	 * @alias {Loader}
 	 * 
 	 * @param {callback} onLoad
 	 * @param {callback} onUnload
@@ -36,8 +36,8 @@ namespace('Oyster.Modules.Utils', function (root)
 	
 	Loader.prototype._loop = function ()
 	{
-		var toLoad		= this._pendingLoad.pop();
-		var toUnload	= this._pendingUnload.pop();
+		var toLoad		= this._pendingLoad.shift();
+		var toUnload	= this._pendingUnload.shift();
 		
 		if (is(toLoad) || is(toUnload))
 		{
@@ -61,57 +61,37 @@ namespace('Oyster.Modules.Utils', function (root)
 		if (this._isRunning)
 			return;
 		
-		if (this._pendingLoad.length === 0 && this._pendingLoad.length === 0)
+		if (this._pendingLoad.length === 0 && this._pendingUnload.length === 0)
 			return;
 		
 		this._isRunning = true;
-		func.do(func.safe(this._loop, function (error) { console.error('Error in load loop', error); }));
+		func.async.do(func.safe(this._loop, function (error) { console.error('Error in load loop', error); }));
 	};
 	
-	Loader.prototype._unfoldArray = function (target, arr)
-	{
-		foreach(arr, 
-			function (item) 
-			{
-				this._pendingLoad.push({});
-				this._pendingUnload.push({});
-				
-				this._append(target, item);
-			}, 
-			this);
-	};
-
 	/**
 	 * @param {[]} target
-	 * @param {Module[]} modules
+	 * @param {Module[]|Module} module
 	 * @private
 	 */
-	Loader.prototype._append = function (target, modules)
+	Loader.prototype._append = function (target, module)
 	{
-		if (is.array(target))
+		if (is.array(module))
 		{
-			this._unfoldArray(target, modules);
+			(target === this._pendingLoad ? this.load(module) : this.unload(module));
 			return;
 		}
 		
 		var container		= array.last(target);
 		var toLoadContainer	= array.last(this._pendingLoad);
 		
-		foreach(modules,
-			/**
-			 * @param {Module} module
-			 */
-			function (module)
-			{
-				var name = module.manager().name();
-				
-				if (is(toLoadContainer[name]))
-				{
-					throw new Error('Module named ' + name + ' is already scheduled for load');
-				}
-				
-				container[name] = module;
-			});
+		var name = module.control().name();
+			
+		if (is(toLoadContainer[name]))
+		{
+			throw new Error('Module named ' + name + ' is already scheduled for load');
+		}
+		
+		container[name] = module;
 	};
 
 
@@ -120,10 +100,12 @@ namespace('Oyster.Modules.Utils', function (root)
 	 */
 	Loader.prototype.load = function (module)
 	{
-		foreach(array(module), function (item) { this._append(this._pendingLoad, item); }, this);
-		
 		this._pendingLoad.push({});
 		this._pendingUnload.push({});
+		
+		foreach(array(module), function (item) { this._append(this._pendingLoad, item); }, this);
+		
+		this._schedule();
 	};
 
 	/**
@@ -131,10 +113,12 @@ namespace('Oyster.Modules.Utils', function (root)
 	 */
 	Loader.prototype.unload = function (module)
 	{
-		foreach(array(module), function (item) { this._append(this._pendingUnload, item); }, this);
-		
 		this._pendingLoad.push({});
 		this._pendingUnload.push({});
+		
+		foreach(array(module), function (item) { this._append(this._pendingUnload, item); }, this);
+		
+		this._schedule();
 	};
 	
 	/**

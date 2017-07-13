@@ -16,7 +16,7 @@ function TestModule()
 	self.add = function() {};
 	
 	
-	this.module = function ()
+	this.control = function ()
 	{
 		return {
 			setIsLoaded: function (val) { self.add([self, 'setIsLoaded', val]); }

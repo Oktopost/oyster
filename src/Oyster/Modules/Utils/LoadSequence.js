@@ -59,7 +59,7 @@ namespace('Oyster.Modules.Utils', function (root)
 	 */
 	LoadSequence.prototype._setIsLoaded = function (set, flag)
 	{
-		foreach(set, function (module) { module.module().setIsLoaded(flag); });
+		foreach(set, function (module) { module.control().setIsLoaded(flag); });
 	};
 
 	/**

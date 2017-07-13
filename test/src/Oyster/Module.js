@@ -14,7 +14,7 @@ suite('Module', () =>
 		
 		subject.setController(controller);
 		
-		assert.strictEqual(controller, subject.module());
+		assert.strictEqual(controller, subject.control());
 	});
 	
 	test('manager', () => 

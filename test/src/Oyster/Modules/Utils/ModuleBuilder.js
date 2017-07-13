@@ -55,7 +55,7 @@ suite('ModuleBuilder', () =>
 			var res = ModuleBuilder.get({}, 'abc', obj);
 			
 			assert.strictEqual(res, obj);
-			assert.equal(obj.module().name(), 'abc');
+			assert.equal(obj.control().name(), 'abc');
 		});
 		
 		test('Pass name, constructor', () => 
@@ -63,7 +63,7 @@ suite('ModuleBuilder', () =>
 			var res = ModuleBuilder.get({}, 'abc', TestModuleA);
 			
 			assert.instanceOf(res, TestModuleA);
-			assert.equal(res.module().name(), 'abc');
+			assert.equal(res.control().name(), 'abc');
 		});
 		
 		test('Pass name, invalid - exception thrown', () => 
@@ -82,7 +82,7 @@ suite('ModuleBuilder', () =>
 			var res = ModuleBuilder.get({}, obj);
 			
 			assert.strictEqual(res, obj);
-			assert.equal(res.module().name(), 'abc');
+			assert.equal(res.control().name(), 'abc');
 		});
 		
 		test('Pass instance without name - exception thrown', () => 
@@ -96,7 +96,7 @@ suite('ModuleBuilder', () =>
 			var res = ModuleBuilder.get({}, TestModuleStaticWithName);
 			
 			assert.instanceOf(res, TestModuleStaticWithName);
-			assert.equal(res.module().name(), 'abc');
+			assert.equal(res.control().name(), 'abc');
 		});
 		
 		test('Pass constructor without name - exception thrown', () => 
@@ -109,7 +109,7 @@ suite('ModuleBuilder', () =>
 			var res = ModuleBuilder.get({}, TestModuleStaticWithNameMethod);
 			
 			assert.instanceOf(res, TestModuleStaticWithNameMethod);
-			assert.equal(res.module().name(), 'abc');
+			assert.equal(res.control().name(), 'abc');
 		});
 		
 		test('Pass constructor with name', () => 
@@ -117,7 +117,7 @@ suite('ModuleBuilder', () =>
 			var res = ModuleBuilder.get({}, TestModuleWithName);
 			
 			assert.instanceOf(res, TestModuleWithName);
-			assert.equal(res.module().name(), 'abc');
+			assert.equal(res.control().name(), 'abc');
 		});
 		
 		test('Pass constructor with name method', () => 
@@ -125,7 +125,7 @@ suite('ModuleBuilder', () =>
 			var res = ModuleBuilder.get({}, TestModuleWithNameMethod);
 			
 			assert.instanceOf(res, TestModuleWithNameMethod);
-			assert.equal(res.module().name(), 'abc');
+			assert.equal(res.control().name(), 'abc');
 		});
 		
 		
@@ -151,8 +151,8 @@ suite('ModuleBuilder', () =>
 			assert.instanceOf(res[0], TestModuleA);
 			assert.strictEqual(res[1], obj);
 			
-			assert.equal(res[0].module().name(), 'abc');
-			assert.equal(res[1].module().name(), 'abd');
+			assert.equal(res[0].control().name(), 'abc');
+			assert.equal(res[1].control().name(), 'abd');
 		});
 		
 		test('Pass array', () => 
@@ -165,8 +165,8 @@ suite('ModuleBuilder', () =>
 			assert.instanceOf(res[0], TestModuleWithNameMethod);
 			assert.strictEqual(res[1], obj);
 			
-			assert.equal(res[0].module().name(), 'abc');
-			assert.equal(res[1].module().name(), '123');
+			assert.equal(res[0].control().name(), 'abc');
+			assert.equal(res[1].control().name(), '123');
 		});
 		
 		test('Pass complex structure', () => 
@@ -180,9 +180,9 @@ suite('ModuleBuilder', () =>
 			assert.instanceOf(res[1], TestModuleA);
 			assert.strictEqual(res[2], obj);
 			
-			assert.equal(res[0].module().name(), 'abc');
-			assert.equal(res[1].module().name(), 'a');
-			assert.equal(res[2].module().name(), '123');
+			assert.equal(res[0].control().name(), 'abc');
+			assert.equal(res[1].control().name(), 'a');
+			assert.equal(res[2].control().name(), '123');
 		});
 		
 		
