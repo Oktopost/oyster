@@ -6,16 +6,23 @@ const obj = root.Plankton.obj;
 
 const ActionRoute			= root.Oyster.Routing.ActionRoute;
 const RoutingConfigParser	= root.Oyster.Routing.RoutingConfigParser;
-const ActionsManager		= root.Oyster.ActionsManager;
 
 const RoutesBuilder			= root.SeaRoute.RoutesBuilder;
+
+const TreeActionsModule		= root.Oyster.Modules.Routing.TreeActionsModule;
+const BaseNavigationModule	= root.Oyster.Modules.BaseNavigationModule;
 
 
 suite('RoutingConfigParser', () => 
 {
 	function manager(mixin)
 	{
-		return obj.mix(new ActionsManager(() => {}, () => {}), mixin || {});
+		var actionsModule = new TreeActionsModule();
+		
+		actionsModule.manager = () => { return { get: () => new BaseNavigationModule() } };
+		actionsModule.preLoad();
+		
+		return obj.mix(actionsModule, mixin || {});
 	}
 	
 	

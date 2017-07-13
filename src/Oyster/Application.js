@@ -4,9 +4,7 @@ namespace('Oyster', function (root)
 	var classify = root.Classy.classify;
 	
 	var ModuleManager = root.Oyster.ModuleManager;
-	var ActionsManager = root.Oyster.ActionsManager;
-	
-	var BaseNavigationModule = root.Oyster.Modules.BaseNavigationModule;
+	var OysterModules = root.Oyster.Modules.OysterModules;
 
 
 	/**
@@ -22,44 +20,12 @@ namespace('Oyster', function (root)
 		classify(this);
 		
 		this._modules = new ModuleManager();
-		this._actions = new ActionsManager(this._handleNavigation, this._handleRouteNotFound);
 	}
 	
 	
 	/**
-	 * @param {string} url
-	 * @private
-	 */
-	Application.prototype._handleNavigation = function (url)
-	{
-		/** @var {BaseNavigationModule} navigationModule */
-		var navigationModule = this._modules.get(BaseNavigationModule);
-		navigationModule.navigate(url);
-	};
-	
-	/**
-	 * @param {string} url
-	 * @private
-	 */
-	Application.prototype._handleRouteNotFound = function (url)
-	{
-		/** @var {BaseNavigationModule} navigationModule */
-		var navigationModule = this._modules.get(BaseNavigationModule);
-		navigationModule.handleMiss(url);
-	};
-	
-	
-	/**
-	 * @return {{addPredefinedParams: addPredefinedParams, addRoutes: (ActionsManager.setupRoutes|*)}}
-	 */
-	Application.prototype.routing = function ()
-	{
-		return this._actions.setup();
-	};
-	
-	/**
 	 * @param {string|*=} config
-	 * @return {ModuleManager|Application|null}
+	 * @return {ModuleManager|Application|null|Module|*}
 	 */
 	Application.prototype.modules = function (config)
 	{
@@ -73,23 +39,41 @@ namespace('Oyster', function (root)
 	};
 	
 	/**
-	 * @return {ActionsManager}
-	 */
-	Application.prototype.actions = function ()
-	{
-		return this._actions;
-	};
-	
-	/**
 	 * Start the application. Should be called after modules and routes configured.
 	 */
 	Application.prototype.run = function ()
 	{
 		this._modules.onLoaded((function ()
 			{
-				this._actions.handleURL(window.location.pathname);
+				/** @var {BaseRoutingModule} */
+				var actionsModule = this.modules(OysterModules.RoutingModule);
+				actionsModule.handleURL(window.location.pathname);
 			})
 			.bind(this));
+	};
+	
+	
+	/**
+	 * Navigation and Routing modules must be passed to this function.
+	 * @param {Module|[Module]} modules
+	 * @param {function(Application, BaseRoutingModule)} callback
+	 * @return {Application}
+	 */
+	Application.create = function (modules, callback)
+	{
+		var app = new Application();
+		
+		app.modules(modules);
+		app.modules().onLoaded(
+			function ()
+			{
+				/** @var {BaseRoutingModule} actionsModule */
+				var actionsModule = app.modules(OysterModules.RoutingModule);
+				callback(app, actionsModule);
+			}
+		);
+		
+		return app;
 	};
 	
 	

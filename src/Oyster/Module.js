@@ -4,8 +4,8 @@ namespace('Oyster', function (root)
 
 
 	/**
-	 * @class Oyster.Module
-	 * @alias Module
+	 * @class {Oyster.Module}
+	 * @alias {Module}
 	 * 
 	 * @property {ModuleController} _controller
 	 * 

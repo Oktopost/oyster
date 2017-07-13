@@ -93,7 +93,6 @@ namespace('Oyster', function (root)
 	/**
 	 * @param {string|Module|function|{}|[]} target
 	 * @param {string|Module|function=} extra
-	 * @returns {ModuleManager}
 	 */
 	ModuleManager.prototype.add = function (target, extra)
 	{
@@ -101,8 +100,6 @@ namespace('Oyster', function (root)
 		target = array(target);
 		
 		this._loader.load(target);
-		
-		return this;
 	};
 
 	/**

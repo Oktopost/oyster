@@ -1,4 +1,4 @@
-const root = require('../../index');
+const root = require('../../../../index');
 const assert = require('chai').assert;
 
 
@@ -7,14 +7,25 @@ const inherit	= root.Classy.inherit;
 
 const Action			= root.Oyster.Action;
 const Navigator			= root.Oyster.Routing.Navigator;
-const ActionsManager	= root.Oyster.ActionsManager;
+const TreeActionsModule	= root.Oyster.Modules.Routing.TreeActionsModule;
+
+const BaseNavigationModule	= root.Oyster.Modules.BaseNavigationModule;
 
 
-suite('ActionsManager', () => 
+suite('TreeActionsModule', () => 
 {
+	function createSubject(baseNav)
+	{
+		var subject = new TreeActionsModule();
+		subject.manager = () => { return { get: () => (baseNav || new BaseNavigationModule()) } };
+		subject.preLoad();
+		return subject;
+	}
+	
+	
 	test('Setup sanity', () => 
 	{
-		var subject = new ActionsManager(() => {}, () => {});
+		var subject = createSubject();
 		
 		subject.setupPredefinedParams({'test_id' : /abc/});
 		var res = subject.setupRoutes({
@@ -29,29 +40,10 @@ suite('ActionsManager', () =>
 		assert.instanceOf(res['$'], Object);
 	});
 	
-	test('Get setup object sanity', () => 
-	{
-		var subject = new ActionsManager(() => {}, () => {});
-		
-		var setup = subject.setup();
-		
-		setup.addPredefinedParams({'test_id' : /abc/});
-		var res = setup.addRoutes({
-			$: {
-				path: '{id|[test_id]}',
-				action: Action,
-			}
-		});
-		
-		
-		assert.instanceOf(res, Object);
-		assert.instanceOf(res['$'], Object);
-	});
-	
 	test('handleURL - router invoked', () => 
 	{
 		var calledWith;
-		var subject = new ActionsManager(() => {}, (a) => { calledWith = a; });
+		var subject = createSubject({ navigate: () => {}, handleMiss: (a) => { calledWith = a; } });
 		
 		subject.handleURL('/abc');
 		
@@ -60,7 +52,7 @@ suite('ActionsManager', () =>
 	
 	test('handle', () => 
 	{
-		var subject = new ActionsManager(() => {}, () => {});
+		var subject = createSubject();
 		var isCalled = false;
 		
 		function MyAction() {}
@@ -83,6 +75,6 @@ suite('ActionsManager', () =>
 	
 	test('navigator', () => 
 	{
-		assert.instanceOf((new ActionsManager(() => {}, () => {})).navigator(), Navigator);
+		assert.instanceOf(createSubject().navigator(), Navigator);
 	});
 });

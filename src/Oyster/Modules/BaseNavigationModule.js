@@ -9,6 +9,8 @@ namespace('Oyster.Modules', function (root)
 	/**
 	 * @name {Oyster.Modules.BaseNavigationModule}
 	 * @alias {NavigationModule}
+	 * 
+	 * @extends {Oyster.Module}
 	 */
 	function BaseNavigationModule()
 	{
@@ -23,11 +25,7 @@ namespace('Oyster.Modules', function (root)
 	BaseNavigationModule.prototype.handleMiss = function (url) {};
 	
 	
-	BaseNavigationModule.moduleName = function () 
-	{
-		return OysterModules.NavigationModule; 
-	};
-	
+	BaseNavigationModule.moduleName = function () { return OysterModules.NavigationModule; };
 	BaseNavigationModule.prototype.moduleName = BaseNavigationModule.moduleName;
 	
 	

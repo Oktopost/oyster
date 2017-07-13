@@ -5,14 +5,21 @@ const assert = require('chai').assert;
 const obj				= root.Plankton.obj;
 const ActionRoute		= root.Oyster.Routing.ActionRoute;
 const ParsingCursor		= root.Oyster.Routing.ParsingCursor;
-const ActionsManager	= root.Oyster.ActionsManager;
+
+const TreeActionsModule		= root.Oyster.Modules.Routing.TreeActionsModule;
+const BaseNavigationModule	= root.Oyster.Modules.BaseNavigationModule;
 
 
 suite('ParsingCursor', () => 
 {
 	function manager(mixin)
 	{
-		return obj.mix(new ActionsManager(() => {}, () => {}), mixin || {});
+		var actionsModule = new TreeActionsModule();
+		
+		actionsModule.manager = () => { return { get: () => new BaseNavigationModule() } };
+		actionsModule.preLoad();
+		
+		return obj.mix(actionsModule, mixin || {});
 	}
 	
 	

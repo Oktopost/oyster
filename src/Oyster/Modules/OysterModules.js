@@ -5,10 +5,11 @@ namespace('Oyster.Modules', function (root)
 
 	/**
 	 * @name {Oyster.Modules.OysterModules}
-	 * @enum {string}
+	 * @alias OysterModules
 	 */
 	var OysterModules = {
-		NavigationModule: 'Oyster.NavigationModule'
+		NavigationModule: 	'Oyster.NavigationModule',
+		RoutingModule:		'Oyster.RoutingModule'
 	};
 	
 	

@@ -5,35 +5,24 @@ const assert = require('chai').assert;
 const func		= root.Plankton.func;
 const inherit	= root.Classy.inherit;
 
-const ActionsManager	= root.Oyster.ActionsManager;
-const ModuleManager		= root.Oyster.ModuleManager;
 const Application		= root.Oyster.Application;
+const ModuleManager		= root.Oyster.ModuleManager;
 
+const BaseRoutingModule		= root.Oyster.Modules.BaseRoutingModule;
 const BaseNavigationModule	= root.Oyster.Modules.BaseNavigationModule;
 
 
 suite('Application', () => 
 {
-	test('Sanity getters', () => 
-	{
-		var app = new Application();
-		
-		assert.instanceOf(app.actions(), ActionsManager);
-		assert.instanceOf(app.modules(), ModuleManager);
-		
-		app.actions().setup = () => 123;
-		
-		assert.equal(123, app.routing());
-	});
-	
-	
 	test('run', () => 
 	{
 		var calledWith;
 		var app = new Application();
+		var module = new BaseRoutingModule();
 		
 		global.window = { location: { pathname: '/ma/url' } };
-		app._actions.handleURL = (a) => { calledWith = a; };
+		app.modules().add(module);
+		module.handleURL = (a) => { calledWith = a; };
 		
 		app.run();
 		
@@ -41,56 +30,60 @@ suite('Application', () =>
 	});
 	
 	
-	test('Navigation module used', () => 
+	suite('create', () => 
 	{
-		var app = new Application();
-		var called = [];
-		
-		function NavModule()
+		test('Application instance returned', () => 
 		{
-			this.navigate = (a) => { called.push(a); };
-		}
+			var res = Application.create(
+				[
+					BaseRoutingModule,
+					BaseNavigationModule
+				], 
+				function (app) {});
+			
+			assert.instanceOf(res, Application);
+		});
 		
-		
-		inherit(NavModule, BaseNavigationModule);
-		app.modules(NavModule);
-		
-		
-		return (func.postponed(() => 
+		test('Application passed to callback', () => 
 		{
-			app.actions().navigator().goto('/hello/world');
+			var calledApp;
+			var res = Application.create(
+				[
+					BaseRoutingModule,
+					BaseNavigationModule
+				], 
+				function (app)
+				{
+					calledApp = app;
+				});
 			
 			return (func.postponed(() => 
-			{
-				assert.deepEqual(called, ['/hello/world']);
-			}, 1))();
-		}, 1))();
-	});
-	
-	test('Navigation module used for miss', () => 
-	{
-		var app = new Application();
-		var called = [];
+				{ 
+					assert.equal(calledApp, res);
+				}, 
+				1))();
+		});
 		
-		function NavModule()
+		test('Router module passed to callback', () => 
 		{
-			this.handleMiss = (a) => { called.push(a); };
-		}
-		
-		
-		inherit(NavModule, BaseNavigationModule);
-		app.modules(NavModule);
-		
-		
-		return (func.postponed(() => 
-		{
-			app.actions().handleURL('/hello/world');
+			var calledModule;
+			
+			Application.create(
+				[
+					BaseRoutingModule,
+					BaseNavigationModule
+				], 
+				function (a, module)
+				{
+					calledModule = module;
+				});
 			
 			return (func.postponed(() => 
-			{
-				assert.deepEqual(called, ['/hello/world']);
-			}, 1))();
-		}, 1))();
+				{ 
+					assert.instanceOf(calledModule, BaseRoutingModule);
+				}, 
+				1))();
+		});
 	});
 	
 	
@@ -126,7 +119,7 @@ suite('Application', () =>
 			}, 1))();
 		});
 		
-		test('Pass nathing, manager returned', () => 
+		test('Pass nothing, manager returned', () => 
 		{
 			var app = new Application();
 			assert.instanceOf(app.modules(), ModuleManager);
