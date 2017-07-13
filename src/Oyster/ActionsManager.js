@@ -1,7 +1,6 @@
 namespace('Oyster', function (root)
 {
-	var is		= root.Plankton.is;
-	var array	= root.Plankton.array;
+	var func	= root.Plankton.func;
 	
 	var classify		= root.Classy.classify;
 	var Router			= root.SeaRoute.Router;
@@ -44,6 +43,14 @@ namespace('Oyster', function (root)
 	};
 	
 	/**
+	 * @param {string} url
+	 */
+	ActionsManager.prototype.handleURL = function (url)
+	{
+		(func.async(this._router.handle(url)))();
+	};
+	
+	/**
 	 * @param {*} params
 	 */
 	ActionsManager.prototype.setupPredefinedParams = function (params)
@@ -54,6 +61,20 @@ namespace('Oyster', function (root)
 	ActionsManager.prototype.setupRoutes = function (config)
 	{
 		return RoutingConfigParser.parse(this, config, this._builder);
+	};
+	
+	/**
+	 * @return {{addPredefinedParams: addPredefinedParams, addRoutes: (ActionsManager.setupRoutes|*), handle: handle}}
+	 */
+	ActionsManager.prototype.setup = function ()
+	{
+		var self = this;
+		var object = {
+			addPredefinedParams: function (params) { self.setupPredefinedParams(params); return object; },
+			addRoutes: this.setupRoutes
+		};
+		
+		return object;
 	};
 	
 	

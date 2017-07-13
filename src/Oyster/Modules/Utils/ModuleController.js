@@ -4,8 +4,15 @@ namespace('Oyster.Modules.Utils', function (root)
 
 	
 	/**
-	 * @name Oyster.Modules.Utils.ModuleController
-	 * @alias ModuleController
+	 * @name {Oyster.Modules.Utils.ModuleController}
+	 * @alias {ModuleController}
+	 * 
+	 * @property {ModuleManager}	_manager
+	 * @property {string}			_name
+	 * @property {boolean}			_isLoaded
+	 * 
+	 * @param {ModuleManager} manager
+	 * @param {string} name
 	 * 
 	 * @constructor
 	 */
@@ -35,6 +42,9 @@ namespace('Oyster.Modules.Utils', function (root)
 		return this._name;
 	};
 	
+	/**
+	 * @return {ModuleManager}
+	 */
 	ModuleController.prototype.manager = function ()
 	{
 		return this._manager;

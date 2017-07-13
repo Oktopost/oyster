@@ -17,15 +17,17 @@ namespace('Oyster.Modules.Utils', function (root)
 	 * 
 	 * @param {callback} onLoad
 	 * @param {callback} onUnload
+	 * @param {callback=} onComplete
 	 * 
 	 * @constructor
 	 */
-	function Loader(onLoad, onUnload)
+	function Loader(onLoad, onUnload, onComplete)
 	{
 		classify(this);
 		
 		this._pendingLoad		= [];
 		this._pendingUnload		= [];
+		this._onComplete		= onComplete || function() {};
 		
 		this._seq		= new LoadSequence(onLoad, onUnload);
 		this._isRunning	= false;
@@ -49,6 +51,9 @@ namespace('Oyster.Modules.Utils', function (root)
 	{
 		this._isRunning = false;
 		this._schedule();
+		
+		if (!this._isRunning)
+			this._onComplete();
 	};
 	
 	Loader.prototype._schedule = function ()
@@ -130,6 +135,14 @@ namespace('Oyster.Modules.Utils', function (root)
 		
 		this._pendingLoad.push({});
 		this._pendingUnload.push({});
+	};
+	
+	/**
+	 * @return {boolean}
+	 */
+	Loader.prototype.isLoading = function ()
+	{
+		return this._isRunning;
 	};
 	
 	

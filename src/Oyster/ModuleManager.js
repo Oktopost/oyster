@@ -1,16 +1,19 @@
 namespace('Oyster', function (root)
 {
 	var classify 	= root.Classy.classify;
+	
 	var is			= root.Plankton.is;
+	var func		= root.Plankton.func;
 	var array		= root.Plankton.array;
+	var foreach		= root.Plankton.foreach;
 	
 	var Loader			= root.Oyster.Modules.Utils.Loader;
 	var ModuleBuilder	= root.Oyster.Modules.Utils.ModuleBuilder;
 	
-
+	
 	/**
-	 * @class Oyster.ModuleManager
-	 * @alias Manager
+	 * @class {Oyster.ModuleManager}
+	 * @alias {ModuleManager}
 	 * 
 	 * @property {*} _modules
 	 * @property {Loader} _loader
@@ -22,15 +25,28 @@ namespace('Oyster', function (root)
 		classify(this);
 		
 		this._modules = {};
+		this._onCompleteCallbacks = [];
 		this._loader = new Loader(this._register, this._deRegister);
 	}
-
-
+	
+	/**
+	 * @param {*} element
+	 * @return {string}
+	 * @private
+	 */
+	ModuleManager.prototype._extractName = function (element)
+	{
+		if (is.string(element)) return element;
+		else if (is.string(element.name)) return element.name;
+		else if (is.function(element.name)) return element.name();
+		else return element.toString();
+	};
+	
 	/**
 	 * @param {Module} module
 	 * @private
 	 */
-	Manager.prototype._register = function (module)
+	ModuleManager.prototype._register = function (module)
 	{
 		var name = module.module().name();
 		
@@ -44,7 +60,7 @@ namespace('Oyster', function (root)
 	 * @param {Module} module
 	 * @private
 	 */
-	Manager.prototype._deRegister = function (module)
+	ModuleManager.prototype._deRegister = function (module)
 	{
 		var name = module.module().name();
 		
@@ -54,12 +70,21 @@ namespace('Oyster', function (root)
 		delete this._modules[name];
 	};
 	
+	ModuleManager.prototype._invokeOnComplete = function ()
+	{
+		var callbacks = this._onCompleteCallbacks.concat();
+		
+		this._onCompleteCallbacks = [];
+		
+		foreach(callbacks, function (callback) { callback(); });
+	};
+	
 	
 	/**
 	 * @param {Module} module
-	 * @returns {Manager}
+	 * @returns {ModuleManager}
 	 */
-	Manager.prototype.remove = function (module)
+	ModuleManager.prototype.remove = function (module)
 	{
 		this._loader.unload(module);
 		return this;
@@ -68,9 +93,9 @@ namespace('Oyster', function (root)
 	/**
 	 * @param {string|Module|function|{}|[]} target
 	 * @param {string|Module|function=} extra
-	 * @returns {Manager}
+	 * @returns {ModuleManager}
 	 */
-	Manager.prototype.add = function (target, extra)
+	ModuleManager.prototype.add = function (target, extra)
 	{
 		target = ModuleBuilder.get(this, target, extra);
 		target = array(target);
@@ -89,20 +114,33 @@ namespace('Oyster', function (root)
 	 * @param {string} name
 	 * @returns {Module|null}
 	 */
-	Manager.prototype.get = function (name) 
+	ModuleManager.prototype.get = function (name) 
 	{
-		return this._modules[name] || null;
+		return this._modules[this._extractName(name)] || null;
 	};
 
 	/**
 	 * @param {string} name
 	 * @returns {boolean}
 	 */
-	Manager.prototype.has = function (name) 
+	ModuleManager.prototype.has = function (name) 
 	{
-		return is(this._modules[name]);
+		return is(this._modules[this._extractName(name)]);
+	};
+	
+	/**
+	 * @param {function} callback
+	 */
+	ModuleManager.prototype.onLoaded = function (callback)
+	{
+		this._onCompleteCallbacks.push(callback);
+		
+		if (!this._loader.isLoading())
+		{
+			func.async.do(this._invokeOnComplete);
+		}
 	};
 	
 	
-	this.Manager = Manager;
+	this.ModuleManager = ModuleManager;
 });

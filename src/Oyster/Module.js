@@ -35,6 +35,9 @@ namespace('Oyster', function (root)
 		return this._controller;
 	};
 	
+	/**
+	 * @return {ModuleManager}
+	 */
 	Module.prototype.manager = function ()
 	{
 		return this._controller.manager();

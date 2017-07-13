@@ -8,8 +8,8 @@ namespace('Oyster.Modules.Utils', function (root)
 	
 
 	/**
-	 * @name Oyster.Modules.Utils.ModuleBuilder
-	 * @alias ModuleBuilder
+	 * @name {Oyster.Modules.Utils.ModuleBuilder}
+	 * @alias {ModuleBuilder}
 	 */
 	var ModuleBuilder = {
 
