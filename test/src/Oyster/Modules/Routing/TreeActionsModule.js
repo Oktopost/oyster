@@ -9,6 +9,7 @@ const Action			= root.Oyster.Action;
 const Navigator			= root.Oyster.Routing.Navigator;
 const TreeActionsModule	= root.Oyster.Modules.Routing.TreeActionsModule;
 
+const OysterModules			= root.Oyster.Modules.OysterModules;
 const BaseNavigationModule	= root.Oyster.Modules.BaseNavigationModule;
 
 
@@ -17,7 +18,11 @@ suite('TreeActionsModule', () =>
 	function createSubject(baseNav)
 	{
 		var subject = new TreeActionsModule();
-		subject.manager = () => { return { get: () => (baseNav || new BaseNavigationModule()) } };
+		subject.manager = () => { return { get: (a) => 
+		{
+			if (a === OysterModules.NavigationModule)
+				return (baseNav || new BaseNavigationModule());
+		} } };
 		subject.preLoad();
 		return subject;
 	}

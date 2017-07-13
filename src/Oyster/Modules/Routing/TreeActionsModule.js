@@ -12,8 +12,7 @@ namespace('Oyster.Modules.Routing', function (root)
 	var Navigator			= root.Oyster.Routing.Navigator;
 	var RoutingConfigParser	= root.Oyster.Routing.RoutingConfigParser;
 	var BaseRoutingModule	= root.Oyster.Modules.BaseRoutingModule;
-	
-	var OysterModules		= root.Oyster.OysterModules;
+	var OysterModules		= root.Oyster.Modules.OysterModules;
 	
 
 	/**
