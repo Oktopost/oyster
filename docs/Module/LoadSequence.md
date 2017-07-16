@@ -12,7 +12,7 @@ Next operations are applied for each instance of **L** or **U** modules in the o
 3. **U** modules are unmounted by the module manager.
 4. **U**.**postUnload**()
 5. **U**.**onUnload**()
-6. **L** modules are mounted by the module manager mounted
+6. **L** modules are mounted by the module manager.
 7. **L**.**preLoad**()
 8. **L**.**onLoad**()
 9. **L**.**postLoad**()
@@ -67,7 +67,9 @@ u2.onUnload();
 
 ## 4. Unmount **U1**, **U2**
 
-All the modules targeted for unmount are removed from the module manager.
+All the modules targeted for unmount are removed from the module manager. They can not be obtained any more 
+from the manager using the *get* function.
+
 * Module manager's new state is: **M1**, **M2**
 
 	![](MiddleState.png)
@@ -83,7 +85,9 @@ u2.postUnload();
 
 ## 6. Mount **L1** and **L2**
 
-All modules targeted for mount are mounted by the module manager.
+All modules targeted for mount are mounted by the module manager. This modules are now can be obtained 
+through the *get* method of the module manager.
+ 
 * New module manager's state is: **M1**, **M2**, **L1**, **L2**
 
 	![](FinalState.png)
