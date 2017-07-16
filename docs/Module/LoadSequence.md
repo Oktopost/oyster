@@ -21,14 +21,19 @@ Next operations are applied for each instance of **L** or **U** modules in the o
 ## Pre condition
 
 Assuming the state of the module manger as follows:
-Mounted modules: **M1**, **M2**, **U1**, **U2**
-[](InitialState.png)
 
-Modules to mount: **L1**, **L2**
-[](ToMount.png)
+* Loaded modules: **M1**, **M2**, **U1**, **U2**
 
-Modules to unmount: **U1**, **U2**
-[](ToUnmount.png)
+	![](./InitialState.png)
+
+* Modules to mount: **L1**, **L2**
+
+	![](ToMount.png)
+
+* Modules to unmount: **U1**, **U2**
+
+ 	![](ToUnmount.png)
+
 
 ## 1. Invoke (**L1**, **L2**).initialize()
 
@@ -63,8 +68,9 @@ u2.onUnload();
 ## 4. Unmount **U1**, **U2**
 
 All the modules targeted for unmount are removed from the module manager.
-Module manager's new state is: **M1**, **M2**
-[](MiddleState.png)
+* Module manager's new state is: **M1**, **M2**
+
+	![](MiddleState.png)
 
 ## 5. Invoke (**U1**, **U2**).postUnload()
 
@@ -78,8 +84,9 @@ u2.postUnload();
 ## 6. Mount **L1** and **L2**
 
 All modules targeted for mount are mounted by the module manager.
-New module manager's state is: **M1**, **M2**, **L1**, **L2**
-[](FinalState.png)
+* New module manager's state is: **M1**, **M2**, **L1**, **L2**
+
+	![](FinalState.png)
 
 ## 7. Invoke (**L1**, **L2**).preLoad
 
