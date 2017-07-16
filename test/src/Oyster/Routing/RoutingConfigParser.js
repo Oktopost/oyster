@@ -15,6 +15,10 @@ const BaseNavigationModule	= root.Oyster.Modules.BaseNavigationModule;
 
 suite('RoutingConfigParser', () => 
 {
+	/**
+	 * @param mixin
+	 * @return {TreeActionsModule}
+	 */
 	function manager(mixin)
 	{
 		var actionsModule = new TreeActionsModule();
@@ -60,6 +64,30 @@ suite('RoutingConfigParser', () =>
 			
 			assert.instanceOf(res['$'], ActionRoute);
 			assert.instanceOf(res['$'], ActionRoute);
+		});
+		
+		test('single route defined using the "_" character', () => 
+		{
+			var res = RoutingConfigParser.parse(manager(), { _: { action: () => {}, path: '' } }, builder());
+			
+			assert.instanceOf(res['$'], ActionRoute);
+		});
+		
+		test('route defined using the "_" character not added to the router', () => 
+		{
+			var isCalled = false;
+			var m = manager({
+				router: function ()
+				{
+					return {
+						appendRoutes: function(target) { isCalled = true; }
+					}
+				}
+			});
+			
+			var res = RoutingConfigParser.parse(m, { _: { action: () => {}, path: '' } }, builder());
+			
+			assert.isFalse(isCalled);
 		});
 		
 		test('route with children', () => 

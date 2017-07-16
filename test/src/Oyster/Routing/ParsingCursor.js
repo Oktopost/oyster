@@ -40,6 +40,15 @@ suite('ParsingCursor', () =>
 			
 			assert.equal('/a/b/{c}/e/f/d', res.route().path().text());
 		});
+			
+		test('Missing path, use empty sting instead', () => 
+		{
+			var subject = new ParsingCursor(manager());
+			
+			var res = subject.parseRouteConfig({ action: {} });
+			
+			assert.equal('/', res.route().path().text());
+		});
 		
 		test('Manager invoked', () => 
 		{
@@ -61,6 +70,37 @@ suite('ParsingCursor', () =>
 			assert.strictEqual(action, res);
 			assert.deepEqual(params, { a: 1 });
 		});
+		
+		
+		suite('Partial route', () => 
+		{
+			test('Add partial route, route not added to the router', () =>
+			{
+				var isCalled = false;
+				var subject = new ParsingCursor(manager({
+					router: function ()
+					{
+						return {
+							appendRoutes: function(target) { isCalled = true; }
+						}
+					}
+				}));
+				
+				subject.parseRouteConfig({ action: {}, path: '/a' }, true);
+				
+				assert.isFalse(isCalled);
+			});
+			
+			test('Add partial route, route parsed', () =>
+			{
+				var subject = new ParsingCursor(manager());
+			
+				var obj = subject.parseRouteConfig({ action: {}, path: '/a' }, true);
+				
+				assert.equal('/a', obj.route().path().text());
+			});
+		});
+		
 		
 		suite('First call', () =>
 		{

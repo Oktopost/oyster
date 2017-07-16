@@ -16,10 +16,10 @@ namespace('Oyster.Routing', function (root)
 	 * @property {[string]}		_pathParts
 	 * @property {[{}]}			_paramsConfig
 	 * 
-	 * @property {ActionsManager}			_manager
+	 * @property {TreeActionsModule}	_manager
 	 * @property {SeaRoute.RoutesBuilder}	_builder
 	 * 
-	 * @param {ActionsManager}			manager
+	 * @param {TreeActionsModule}		manager
 	 * @param {SeaRoute.RoutesBuilder=}	builder
 	 * @constructor
 	 */
@@ -92,10 +92,13 @@ namespace('Oyster.Routing', function (root)
 	
 	/**
 	 * @param {{action: *, path: *, ...}} config
+	 * @param {boolean=false} isPartial
 	 * @return {ActionRoute}
 	 */
-	ParsingCursor.prototype.parseRouteConfig = function (config)
+	ParsingCursor.prototype.parseRouteConfig = function (config, isPartial)
 	{
+		isPartial = isPartial || false;
+		
 		var route;
 		var action;
 		var manager = this._manager;
@@ -103,7 +106,7 @@ namespace('Oyster.Routing', function (root)
 		
 		// Push action and path.
 		this._actions.push(routeConfig.action);
-		this._pathParts.push(routeConfig.path);
+		this._pathParts.push(routeConfig.path || '');
 		this._paramsConfig.push(routeConfig.params || {});
 		
 		// Setup the config that will be passed to the routes builder
@@ -115,8 +118,10 @@ namespace('Oyster.Routing', function (root)
 		
 		// Create the route and push it to the top of the stack. This will extract the route parameters.
 		route = this._builder.create(routeConfig);
-		this._manager.router().appendRoutes(route);
 		this._paramNames.push(route.paramNames());
+		
+		if (!isPartial)
+			this._manager.router().appendRoutes(route);
 		
 		// Set the variable 'action' so that it's used in the callback.
 		action = this._createActionRoute(route);

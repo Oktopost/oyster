@@ -33,6 +33,12 @@ namespace('Oyster.Routing', function (root)
 				delete config['route'];
 				return true;
 			}
+			else if (is(config['_']) && is.function(config['_'].action))
+			{
+				object['$'] = cursor.parseRouteConfig(config['_'], true);
+				delete config['_'];
+				return true;
+			}
 			
 			return false;
 		},
@@ -58,7 +64,7 @@ namespace('Oyster.Routing', function (root)
 		
 		
 		/**
-		 * @param {ActionsManager} manager
+		 * @param {TreeActionsModule} manager
 		 * @param {*} config
 		 * @param {RoutesBuilder=} builder
 		 */
