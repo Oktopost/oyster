@@ -43,8 +43,14 @@ namespace('Oyster.Routing', function (root)
 	ParsingCursor.prototype._createActionRoute = function (route) 
 	{
 		var actionRoute = new ActionRoute();
+		var actions = [];
 		
-		actionRoute.setActions(this._actions, this._paramNames.concat());
+		foreach (this._actions, function (item)
+		{
+			if (item !== null) actions.push(item);
+		});
+		
+		actionRoute.setActions(actions, this._paramNames.concat());
 		actionRoute.setRoute(route);
 		
 		return actionRoute;
@@ -105,7 +111,7 @@ namespace('Oyster.Routing', function (root)
 		var routeConfig = obj.copy(config);
 		
 		// Push action and path.
-		this._actions.push(routeConfig.action);
+		this._actions.push(routeConfig.action || null);
 		this._pathParts.push(routeConfig.path || '');
 		this._paramsConfig.push(routeConfig.params || {});
 		

@@ -102,6 +102,32 @@ suite('ParsingCursor', () =>
 		});
 		
 		
+		suite('Actionless route', () => 
+		{
+			test('ActionRoute setup correctly', () =>
+			{
+				var subject = new ParsingCursor(manager());
+			
+				subject.parseRouteConfig({ action: {}, path: 'a' });
+				subject.parseRouteConfig({ path: 'b' });
+				var res = subject.parseRouteConfig({ action: {}, path: 'c' });
+				
+				assert.equal(res.actions().length, 2);
+			});
+			
+			test('Route setup correctly', () =>
+			{
+				var subject = new ParsingCursor(manager());
+			
+				subject.parseRouteConfig({ action: {}, path: 'a' });
+				subject.parseRouteConfig({ path: 'b' });
+				var res = subject.parseRouteConfig({ action: {}, path: 'c' });
+				
+				assert.equal('/a/b/c', res.route().path().text());
+			});
+		});
+		
+		
 		suite('First call', () =>
 		{
 			test('ActionRoute Returned', () => 
