@@ -54,7 +54,7 @@ suite('Loader', () =>
 	});
 	
 	
-	suite.only('Loading process', () => 
+	suite('Loading process', () => 
 	{
 		test('Single module loaded', () => 
 		{

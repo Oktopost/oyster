@@ -28,6 +28,17 @@ suite('Module', () =>
 		assert.strictEqual(obj, subject.manager());
 	});
 	
+	test('app', () => 
+	{
+		var subject = new Module();
+		var obj = {};
+		var controller = { app: () => obj };
+		
+		subject.setController(controller);
+		
+		assert.strictEqual(obj, subject.app());
+	});
+	
 	
 	test('sanity', () => 
 	{

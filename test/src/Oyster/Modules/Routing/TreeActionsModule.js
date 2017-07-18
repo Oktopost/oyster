@@ -47,6 +47,7 @@ suite('TreeActionsModule', () =>
 		});
 		
 		
+		assert.strictEqual(subject._chain._module, subject);
 		assert.instanceOf(res, Object);
 		assert.instanceOf(res['$'], Object);
 	});

@@ -2,7 +2,8 @@ const root = require('../../index');
 const assert = require('chai').assert;
 
 
-const Action = root.Oyster.Action;
+const Action		= root.Oyster.Action;
+const Application	= root.Oyster.Application;
 
 
 suite('Action', () => 
@@ -37,5 +38,41 @@ suite('Action', () =>
 		
 		assert.equal(link, 'hello');
 		assert.deepEqual(called, ['target', {a: 1}, 'target2', {b: 3}]);
+	});
+	
+	test('app', () => 
+	{
+		var subject = new Action();
+		var app = new Application();
+		
+		subject.setChainLink({ app: () => app });
+		
+		assert.strictEqual(subject.app(), app); 
+	});
+	
+	suite('modules', () => 
+	{
+		test('app not set, return null', () =>
+		{
+			var subject = new Action();
+			var app = new Application();
+			
+			subject.setChainLink({ app: () => null });
+			
+			assert.isNull(subject.modules('a'));
+		});
+		
+		test('app set, return module by name', () =>
+		{
+			var subject = new Action();
+			var app = new Application();
+			
+			var module = {};
+			
+			app._modules._modules['a'] = module;
+			subject.setChainLink({ app: () => app });
+			
+			assert.strictEqual(subject.modules('a'), module);
+		});
 	});
 });

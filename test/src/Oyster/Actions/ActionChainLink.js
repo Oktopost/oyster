@@ -3,6 +3,7 @@ const assert = require('chai').assert;
 
 
 const Action			= root.Oyster.Action;
+const Application		= root.Oyster.Application;
 const ActionChainLink	= root.Oyster.Actions.ActionChainLink;
 
 
@@ -37,6 +38,16 @@ suite('ActionChainLink', () =>
 		assert.isNull(subject.parent());
 	});
 	
+	test('setApp', () => 
+	{
+		var subject = new ActionChainLink(new Action());
+		var app = new Application();
+		
+		ActionChainLink.setApp(subject, app);
+		
+		assert.equal(subject.app(), app);
+	});
+	
 	test('unmount', () => 
 	{
 		var subject = new ActionChainLink(new Action());
@@ -44,6 +55,7 @@ suite('ActionChainLink', () =>
 		ActionChainLink.updateRelations(subject, new ActionChainLink(new Action()), new ActionChainLink(new Action()));
 		ActionChainLink.unmount(subject);
 		
+		assert.isNull(subject.app());
 		assert.isNull(subject.child());
 		assert.isNull(subject.parent());
 		assert.isFalse(subject.isMounted());
@@ -60,7 +72,6 @@ suite('ActionChainLink', () =>
 		
 		assert.isTrue(subject.hasChild());
 	});
-	
 	
 	test('hasParent', () => 
 	{

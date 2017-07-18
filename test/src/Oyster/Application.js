@@ -44,6 +44,18 @@ suite('Application', () =>
 			assert.instanceOf(res, Application);
 		});
 		
+		test('Application passed to modules manager', () => 
+		{
+			var res = Application.create(
+				[
+					BaseRoutingModule,
+					BaseNavigationModule
+				], 
+				function (app) {});
+			
+			assert.strictEqual(res.modules()._app, res);
+		});
+		
 		test('Application passed to callback', () => 
 		{
 			var calledApp;
