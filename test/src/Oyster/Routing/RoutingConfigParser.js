@@ -4,6 +4,8 @@ const assert = require('chai').assert;
 
 const obj = root.Plankton.obj;
 
+const Application			= root.Oyster.Application;
+
 const ActionRoute			= root.Oyster.Routing.ActionRoute;
 const RoutingConfigParser	= root.Oyster.Routing.RoutingConfigParser;
 
@@ -24,6 +26,7 @@ suite('RoutingConfigParser', () =>
 		var actionsModule = new TreeActionsModule();
 		
 		actionsModule.manager = () => { return { get: () => new BaseNavigationModule() } };
+		actionsModule.app = () => { return new  Application(); };
 		actionsModule.preLoad();
 		
 		return obj.mix(actionsModule, mixin || {});

@@ -5,7 +5,14 @@ const assert = require('chai').assert;
 const func		= root.Plankton.func;
 
 const Module		= root.Oyster.Module;
+const Application	= root.Oyster.Application;
 const ModuleManager	= root.Oyster.ModuleManager;
+
+
+function createSubject()
+{
+	return new ModuleManager(new Application());
+}
 
 
 suite('ModuleManager', () => 
@@ -15,7 +22,7 @@ suite('ModuleManager', () =>
 		test('Not in loading state', () => 
 		{
 			var isCalled = false;
-			var subject = new ModuleManager();
+			var subject = createSubject();
 			
 			subject.onLoaded(() => { isCalled = true; });
 			
@@ -27,7 +34,7 @@ suite('ModuleManager', () =>
 		test('In loading state, called after load is invoked', () => 
 		{
 			var calledSeq = [];
-			var subject = new ModuleManager();
+			var subject = createSubject();
 			
 			var module = new Module();
 			module.moduleName = 'mod';
@@ -42,7 +49,7 @@ suite('ModuleManager', () =>
 		test('onLoad invoked only once', () => 
 		{
 			var calledSeq = [];
-			var subject = new ModuleManager();
+			var subject = createSubject();
 			
 			var module = new Module();
 			module.moduleName = 'mod';
@@ -69,14 +76,14 @@ suite('ModuleManager', () =>
 	{
 		test('Module not found', () => 
 		{
-			var subject = new ModuleManager();
+			var subject = createSubject();
 			
 			assert.isFalse(subject.has('abc'));
 		});
 		
 		test('Module found', () => 
 		{
-			var subject = new ModuleManager();
+			var subject = createSubject();
 			
 			var module = new Module();
 			module.moduleName = 'abc';
@@ -95,14 +102,14 @@ suite('ModuleManager', () =>
 	{
 		test('Module not found', () => 
 		{
-			var subject = new ModuleManager();
+			var subject = createSubject();
 			
 			assert.isNull(subject.get('abc'));
 		});
 		
 		test('Module found', () => 
 		{
-			var subject = new ModuleManager();
+			var subject = createSubject();
 			
 			var module = new Module();
 			module.moduleName = 'abc';
@@ -121,7 +128,7 @@ suite('ModuleManager', () =>
 	{
 		test('Module added', () => 
 		{
-			var subject = new ModuleManager();
+			var subject = createSubject();
 			
 			var module = new Module();
 			module.moduleName = 'abc';
@@ -137,7 +144,7 @@ suite('ModuleManager', () =>
 		
 		test('Module already existed, exception thrown', () => 
 		{
-			var subject = new ModuleManager();
+			var subject = createSubject();
 			
 			var module = new Module();
 			module.moduleName = 'abc';
@@ -154,9 +161,30 @@ suite('ModuleManager', () =>
 	
 	suite('remove', () => 
 	{
+		test('Remove by name', () => 
+		{
+			var calledWith;
+			var module = { a: 1 };
+			var subject = createSubject();
+			
+			subject._modules['a'] = module;
+			subject._loader = { unload: (a) => { calledWith = a; } };
+			
+			subject.remove('a');
+			
+			assert.strictEqual(calledWith, module); 
+		});
+		
+		test('Remove by name, when module with given name not registered, exception thrown', () => 
+		{
+			var subject = createSubject();
+			
+			assert.throws(() => { subject.remove('abc'); }); 
+		});
+		
 		test('Module does not exist, exception thrown', () => 
 		{
-			var subject = new ModuleManager();
+			var subject = createSubject();
 			
 			var module = new Module();
 			module.control = () => { return { name: () => 'abc' }};
@@ -166,7 +194,7 @@ suite('ModuleManager', () =>
 		
 		test('Module removed', () => 
 		{
-			var subject = new ModuleManager();
+			var subject = createSubject();
 			
 			var module = new Module();
 			module.moduleName = 'abc';
@@ -191,7 +219,7 @@ suite('ModuleManager', () =>
 	{
 		test('As string', () => 
 		{
-			var subject = new ModuleManager();
+			var subject = createSubject();
 			
 			var module = new Module();
 			module.moduleName = 'abc';
@@ -206,7 +234,7 @@ suite('ModuleManager', () =>
 		
 		test('Object with moduleName string', () => 
 		{
-			var subject = new ModuleManager();
+			var subject = createSubject();
 			
 			var module = new Module();
 			module.moduleName = 'abc';
@@ -221,7 +249,7 @@ suite('ModuleManager', () =>
 		
 		test('Object with moduleName function', () => 
 		{
-			var subject = new ModuleManager();
+			var subject = createSubject();
 			
 			var module = new Module();
 			module.moduleName = 'abc';
@@ -236,7 +264,7 @@ suite('ModuleManager', () =>
 		
 		test('Other non string value ocnverted to string', () => 
 		{
-			var subject = new ModuleManager();
+			var subject = createSubject();
 			
 			var module = new Module();
 			module.moduleName = '123';

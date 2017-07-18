@@ -11,17 +11,18 @@ namespace('Oyster.Modules.Utils', function (root)
 	 * @property {string}			_name
 	 * @property {boolean}			_isLoaded
 	 * 
-	 * @param {ModuleManager} manager
+	 * @param {Application} app
 	 * @param {string} name
 	 * 
 	 * @constructor
 	 */
-	function ModuleController(manager, name)
+	function ModuleController(app, name)
 	{
 		classify(this);
 		
 		this._name		= name;
-		this._manager	= manager;
+		this._app		= app;
+		this._manager	= app.modules();
 		this._isLoaded	= false;
 	}
 
@@ -48,6 +49,14 @@ namespace('Oyster.Modules.Utils', function (root)
 	ModuleController.prototype.manager = function ()
 	{
 		return this._manager;
+	};
+	
+	/**
+	 * @return {Application}
+	 */
+	ModuleController.prototype.app = function ()
+	{
+		return this._app;
 	};
 	
 	ModuleController.prototype.unload = function ()

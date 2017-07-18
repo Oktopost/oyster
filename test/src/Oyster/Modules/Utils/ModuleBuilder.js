@@ -5,6 +5,7 @@ const assert = require('chai').assert;
 const inherit = root.Classy.inherit;
 
 const Module		= root.Oyster.Module;
+const Application	= root.Oyster.Application;
 const ModuleBuilder	= root.Oyster.Modules.Utils.ModuleBuilder;
 
 
@@ -52,7 +53,7 @@ suite('ModuleBuilder', () =>
 		test('Pass name, module', () => 
 		{
 			var obj = new TestModuleA();
-			var res = ModuleBuilder.get({}, 'abc', obj);
+			var res = ModuleBuilder.get(new Application(), 'abc', obj);
 			
 			assert.strictEqual(res, obj);
 			assert.equal(obj.control().name(), 'abc');
@@ -60,7 +61,7 @@ suite('ModuleBuilder', () =>
 		
 		test('Pass name, constructor', () => 
 		{
-			var res = ModuleBuilder.get({}, 'abc', TestModuleA);
+			var res = ModuleBuilder.get(new Application(), 'abc', TestModuleA);
 			
 			assert.instanceOf(res, TestModuleA);
 			assert.equal(res.control().name(), 'abc');
@@ -68,9 +69,9 @@ suite('ModuleBuilder', () =>
 		
 		test('Pass name, invalid - exception thrown', () => 
 		{
-			assert.throws(() => { ModuleBuilder.get({}, 'abc'); });
-			assert.throws(() => { ModuleBuilder.get({}, 'abc', {}); });
-			assert.throws(() => { ModuleBuilder.get({}, 'abc', 123); });
+			assert.throws(() => { ModuleBuilder.get(new Application(), 'abc'); });
+			assert.throws(() => { ModuleBuilder.get(new Application(), 'abc', {}); });
+			assert.throws(() => { ModuleBuilder.get(new Application(), 'abc', 123); });
 		});
 		
 		
@@ -79,7 +80,7 @@ suite('ModuleBuilder', () =>
 			var obj = new TestModuleA();
 			obj.moduleName = () => 'abc';
 			
-			var res = ModuleBuilder.get({}, obj);
+			var res = ModuleBuilder.get(new Application(), obj);
 			
 			assert.strictEqual(res, obj);
 			assert.equal(res.control().name(), 'abc');
@@ -87,13 +88,13 @@ suite('ModuleBuilder', () =>
 		
 		test('Pass instance without name - exception thrown', () => 
 		{
-			assert.throws(() => { ModuleBuilder.get({}, new TestModuleA()); });
+			assert.throws(() => { ModuleBuilder.get(new Application(), new TestModuleA()); });
 		});
 		
 		
 		test('Pass constructor with static name', () => 
 		{
-			var res = ModuleBuilder.get({}, TestModuleStaticWithName);
+			var res = ModuleBuilder.get(new Application(), TestModuleStaticWithName);
 			
 			assert.instanceOf(res, TestModuleStaticWithName);
 			assert.equal(res.control().name(), 'abc');
@@ -101,12 +102,12 @@ suite('ModuleBuilder', () =>
 		
 		test('Pass constructor without name - exception thrown', () => 
 		{
-			assert.throws(() => { ModuleBuilder.get({}, TestModuleA); });
+			assert.throws(() => { ModuleBuilder.get(new Application(), TestModuleA); });
 		});
 		
 		test('Pass constructor with static name method', () => 
 		{
-			var res = ModuleBuilder.get({}, TestModuleStaticWithNameMethod);
+			var res = ModuleBuilder.get(new Application(), TestModuleStaticWithNameMethod);
 			
 			assert.instanceOf(res, TestModuleStaticWithNameMethod);
 			assert.equal(res.control().name(), 'abc');
@@ -114,7 +115,7 @@ suite('ModuleBuilder', () =>
 		
 		test('Pass constructor with name', () => 
 		{
-			var res = ModuleBuilder.get({}, TestModuleWithName);
+			var res = ModuleBuilder.get(new Application(), TestModuleWithName);
 			
 			assert.instanceOf(res, TestModuleWithName);
 			assert.equal(res.control().name(), 'abc');
@@ -122,7 +123,7 @@ suite('ModuleBuilder', () =>
 		
 		test('Pass constructor with name method', () => 
 		{
-			var res = ModuleBuilder.get({}, TestModuleWithNameMethod);
+			var res = ModuleBuilder.get(new Application(), TestModuleWithNameMethod);
 			
 			assert.instanceOf(res, TestModuleWithNameMethod);
 			assert.equal(res.control().name(), 'abc');
@@ -133,20 +134,20 @@ suite('ModuleBuilder', () =>
 		{
 			var obj = new TestModuleA();
 			obj.moduleName = () => 123;
-			assert.throws(() => { ModuleBuilder.get({}, obj); });
+			assert.throws(() => { ModuleBuilder.get(new Application(), obj); });
 			
 			obj.moduleName = 123;
-			assert.throws(() => { ModuleBuilder.get({}, obj); });
+			assert.throws(() => { ModuleBuilder.get(new Application(), obj); });
 			
-			assert.throws(() => { ModuleBuilder.get({}, TestModuleStaticWithNameInvalid); });
-			assert.throws(() => { ModuleBuilder.get({}, TestModuleStaticWithNameMethodInvalid); });
+			assert.throws(() => { ModuleBuilder.get(new Application(), TestModuleStaticWithNameInvalid); });
+			assert.throws(() => { ModuleBuilder.get(new Application(), TestModuleStaticWithNameMethodInvalid); });
 		});
 		
 		
 		test('Pass object', () => 
 		{
 			var obj = new TestModuleA();
-			var res = ModuleBuilder.get({}, { 'abc': TestModuleA, 'abd': obj });
+			var res = ModuleBuilder.get(new Application(), { 'abc': TestModuleA, 'abd': obj });
 			
 			assert.instanceOf(res[0], TestModuleA);
 			assert.strictEqual(res[1], obj);
@@ -160,7 +161,7 @@ suite('ModuleBuilder', () =>
 			var obj = new TestModuleA();
 			obj.moduleName = () => '123';
 			
-			var res = ModuleBuilder.get({}, [ TestModuleWithNameMethod, obj ]);
+			var res = ModuleBuilder.get(new Application(), [ TestModuleWithNameMethod, obj ]);
 			
 			assert.instanceOf(res[0], TestModuleWithNameMethod);
 			assert.strictEqual(res[1], obj);
@@ -174,7 +175,7 @@ suite('ModuleBuilder', () =>
 			var obj = new TestModuleA();
 			obj.moduleName = () => '123';
 			
-			var res = ModuleBuilder.get({}, [ TestModuleWithNameMethod, { 'a': TestModuleA }, [ obj ] ]);
+			var res = ModuleBuilder.get(new Application(), [ TestModuleWithNameMethod, { 'a': TestModuleA }, [ obj ] ]);
 			
 			assert.instanceOf(res[0], TestModuleWithNameMethod);
 			assert.instanceOf(res[1], TestModuleA);
@@ -188,8 +189,8 @@ suite('ModuleBuilder', () =>
 		
 		test('Pass invalid - exception thrown', () => 
 		{
-			assert.throws(() => { ModuleBuilder.get({}, null); });
-			assert.throws(() => { ModuleBuilder.get({}, 123); });
+			assert.throws(() => { ModuleBuilder.get(new Application(), null); });
+			assert.throws(() => { ModuleBuilder.get(new Application(), 123); });
 		});
 	});
 	

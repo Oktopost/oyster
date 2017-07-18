@@ -43,6 +43,14 @@ namespace('Oyster', function (root)
 		return this._controller.manager();
 	};
 	
+	/**
+	 * @return {Application}
+	 */
+	Module.prototype.app = function ()
+	{
+		return this._controller.app();
+	};
+	
 	
 	Module.prototype.initialize = function () {};
 	

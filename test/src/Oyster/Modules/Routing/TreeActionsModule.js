@@ -18,12 +18,18 @@ suite('TreeActionsModule', () =>
 	function createSubject(baseNav)
 	{
 		var subject = new TreeActionsModule();
+		
 		subject.manager = () => { return { get: (a) => 
 		{
 			if (a === OysterModules.NavigationModule)
+			{
 				return (baseNav || new BaseNavigationModule());
+			}
 		} } };
+		
 		subject.preLoad();
+		subject.app = () => { return {}; };
+		
 		return subject;
 	}
 	

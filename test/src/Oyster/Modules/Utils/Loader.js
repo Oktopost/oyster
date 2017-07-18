@@ -5,6 +5,7 @@ const assert = require('chai').assert;
 const func		= root.Plankton.func;
 
 const Module			= root.Oyster.Module;
+const Application		= root.Oyster.Application;
 const Loader			= root.Oyster.Modules.Utils.Loader;
 const ModuleController	= root.Oyster.Modules.Utils.ModuleController;
 
@@ -18,7 +19,7 @@ suite('Loader', () =>
 	function create(name)
 	{
 		var m = new Module;
-		var controller = new ModuleController({}, name);
+		var controller = new ModuleController(new Application(), name);
 		
 		m.setController(controller);
 		
@@ -53,7 +54,7 @@ suite('Loader', () =>
 	});
 	
 	
-	suite('Loading process', () => 
+	suite.only('Loading process', () => 
 	{
 		test('Single module loaded', () => 
 		{

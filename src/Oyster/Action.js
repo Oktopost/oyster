@@ -34,6 +34,24 @@ namespace('Oyster', function (root)
 	};
 	
 	/**
+	 * @returns {Application}
+	 */
+	Action.prototype.app = function ()
+	{
+		return this._chainLink.app();
+	};
+	
+	/**
+	 * @param {string=} name
+	 * @return {ModuleManager|*}
+	 */
+	Action.prototype.modules = function (name)
+	{
+		var app = this._chainLink.app();
+		return (app ? app.modules(name) : null);
+	};
+	
+	/**
 	 * @return {{}|null}
 	 */
 	Action.prototype.params = function ()

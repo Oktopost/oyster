@@ -12,18 +12,20 @@ namespace('Oyster.Actions', function (root)
 	 * @class {Oyster.Actions.ActionChain}
 	 * @alias {ActionChain}
 	 * 
+	 * @property {TreeActionsModule}	_module
 	 * @property {Navigator}			_navigator
 	 * @property {[ActionChainLink]}	_chain
 	 * @property {ActionRoute}			_route
 	 * @property {*}					_params
 	 * 
-	 * @param {Navigator} navigator
+	 * @param {TreeActionsModule} module
 	 * 
 	 * @constructor
 	 */
-	function ActionChain(navigator)
+	function ActionChain(module)
 	{
-		this._navigator	= navigator;
+		this._module	= module;
+		this._navigator	= module.navigator();
 		this._chain		= [];
 		this._params	= {};
 		this._route		= null;
@@ -153,6 +155,8 @@ namespace('Oyster.Actions', function (root)
 					(index === last ? null : this._chain[index + 1]),
 					(index === 0 ? null : this._chain[index - 1])
 				);
+				
+				ActionChainLink.setApp(item, this._module.app());
 				
 				item.action().setParams(params);
 				

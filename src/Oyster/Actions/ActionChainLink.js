@@ -6,6 +6,7 @@ namespace('Oyster.Actions', function (root)
 	 * 
 	 * @property {ActionChainLink}	_child
 	 * @property {ActionChainLink}	_parent
+	 * @property {Application}		_app
 	 * @property {Oyster.Action}	_action
 	 * @property {boolean}			_isMounted
 	 * 
@@ -16,6 +17,7 @@ namespace('Oyster.Actions', function (root)
 	{
 		this._child		= null;
 		this._parent	= null;
+		this._app		= null;
 		this._action	= action;
 		this._isMounted	= false;
 		
@@ -87,6 +89,14 @@ namespace('Oyster.Actions', function (root)
 		return this._isMounted;
 	};
 	
+	/**
+	 * @returns {Application}
+	 */
+	ActionChainLink.prototype.app = function ()
+	{
+		return this._app;
+	};
+	
 	
 	/**
 	 * @param {ActionChainLink} link
@@ -108,6 +118,15 @@ namespace('Oyster.Actions', function (root)
 		link._child = child;
 		link._parent = parent;
 		link._isMounted = true;
+	};
+	
+	/**
+	 * @param {ActionChainLink} link
+	 * @param {Application} app
+	 */
+	ActionChainLink.setApp = function (link, app)
+	{
+		link._app = app;
 	};
 	
 	

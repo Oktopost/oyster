@@ -19,7 +19,7 @@ namespace('Oyster', function (root)
 	{
 		classify(this);
 		
-		this._modules = new ModuleManager();
+		this._modules = new ModuleManager(this);
 	}
 	
 	

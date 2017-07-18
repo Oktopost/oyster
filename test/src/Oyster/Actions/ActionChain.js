@@ -2,13 +2,17 @@ const root = require('../../../index');
 const assert = require('chai').assert;
 
 
-const inherit = root.Classy.inherit;
-const foreach = root.Plankton.foreach;
-const func = root.Plankton.func;
+const inherit	= root.Classy.inherit;
+const foreach	= root.Plankton.foreach;
+const func		= root.Plankton.func;
+const obj		= root.Plankton.obj;
 
 const Action			= root.Oyster.Action;
+const Application		= root.Oyster.Application;
 const ActionChain		= root.Oyster.Actions.ActionChain;
 const ActionChainLink	= root.Oyster.Actions.ActionChainLink;
+const TreeActionsModule	= root.Oyster.Modules.Routing.TreeActionsModule;
+const ModuleController	= root.Oyster.Modules.Utils.ModuleController;
 
 const ActionRoute		= root.Oyster.Routing.ActionRoute;
 
@@ -58,6 +62,20 @@ suite('ActionChain', () =>
 		});
 	}
 	
+	function createModule()
+	{
+		var module = new TreeActionsModule();
+		module.setController(new ModuleController(new Application(), 'a'));
+		module._navigator = { goto: () => {} };
+		return module;
+	}
+	
+	function createSubject()
+	{
+		return new ActionChain(createModule())
+	}
+	
+	
 	var PlainAction = createNewConstructor();
 	var PlainActionB = createNewConstructor();
 	var PlainActionC = createNewConstructor();
@@ -65,7 +83,7 @@ suite('ActionChain', () =>
 	
 	test('constructor', () =>
 	{
-		var subject = new ActionChain();
+		var subject = createSubject();
 		
 		assert.deepEqual(subject.chain(), []);
 		assert.deepEqual(subject.params(), {});
@@ -78,13 +96,18 @@ suite('ActionChain', () =>
 		test('navigator passed to Action', () => 
 		{
 			var isCalled = false;
-			var subject = new ActionChain({ goto: () => { isCalled = true; } });
+			var module = createModule();
+			module._navigator = { goto: () => { isCalled = true; } };
+			
+			var subject = new ActionChain(module);
 			
 			var route = newActionRoute();
 			
-			subject.update(route, {});
-			subject.chain()[0].action().navigate('a', {});
 			
+			subject.update(route, {});
+			
+			
+			subject.chain()[0].action().navigate('a', {});
 			assert.isTrue(isCalled);
 		});
 		
@@ -93,7 +116,7 @@ suite('ActionChain', () =>
 		{
 			test('New params set', () => 
 			{
-				var subject = new ActionChain();
+				var subject = createSubject();
 				var route = newActionRoute();
 				
 				subject.update(route, { a: 1, c: 2 });
@@ -103,7 +126,7 @@ suite('ActionChain', () =>
 			
 			test('New params set when update called more then once', () => 
 			{
-				var subject = new ActionChain();
+				var subject = createSubject();
 				var route = newActionRoute();
 				
 				subject.update(newActionRoute(), { a: 1, c: 2 });
@@ -114,7 +137,7 @@ suite('ActionChain', () =>
 			
 			test('Route set', () => 
 			{
-				var subject = new ActionChain();
+				var subject = createSubject();
 				var actionRoute = newActionRoute();
 				
 				subject.update(actionRoute, {});
@@ -124,7 +147,7 @@ suite('ActionChain', () =>
 			
 			test('Route set when update called more then once', () => 
 			{
-				var subject = new ActionChain();
+				var subject = createSubject();
 				var actionRoute = newActionRoute();
 				
 				subject.update(newActionRoute(), {});
@@ -135,7 +158,7 @@ suite('ActionChain', () =>
 			
 			test('Chain updated', () => 
 			{
-				var subject = new ActionChain();
+				var subject = createSubject();
 				
 				subject.update(newActionRoute(), {});
 				
@@ -144,7 +167,7 @@ suite('ActionChain', () =>
 			
 			test('Chain updated after update called more then once', () => 
 			{
-				var subject = new ActionChain();
+				var subject = createSubject();
 				
 				subject.update(newActionRoute(), {});
 				subject.update(newActionRoute([PlainAction, PlainActionB], [[],[]]), {});
@@ -158,7 +181,7 @@ suite('ActionChain', () =>
 		{
 			test('Single action, chain structure is correct', () => 
 			{
-				var subject = new ActionChain();
+				var subject = createSubject();
 				var actionRoute = newActionRoute();
 				
 				subject.update(actionRoute, {});
@@ -173,7 +196,7 @@ suite('ActionChain', () =>
 			
 			test('Two actions, chain structure is correct', () => 
 			{
-				var subject = new ActionChain();
+				var subject = createSubject();
 				var actionRoute = newActionRoute([PlainAction, PlainActionB], [[],[]]);
 				
 				subject.update(actionRoute, {});
@@ -195,7 +218,7 @@ suite('ActionChain', () =>
 			
 			test('Multiple actions, chain structure is correct', () => 
 			{
-				var subject = new ActionChain();
+				var subject = createSubject();
 				var actionRoute = newActionRoute([PlainAction, PlainActionB, PlainActionC], [[],[],[]]);
 				
 				subject.update(actionRoute, {});
@@ -211,7 +234,7 @@ suite('ActionChain', () =>
 			
 			test('Chain updated on consecutive calls', () => 
 			{
-				var subject = new ActionChain();
+				var subject = createSubject();
 				
 				subject.update(newActionRoute([PlainAction, PlainActionB, PlainActionC], [[],[],[]]), {});
 				subject.update(newActionRoute([PlainActionC, PlainAction], [[],[]]), {});
@@ -228,7 +251,7 @@ suite('ActionChain', () =>
 			
 			test('Old chain dismounted', () => 
 			{
-				var subject = new ActionChain();
+				var subject = createSubject();
 				
 				subject.update(newActionRoute([PlainAction], [[],[],[]]), {});
 				var chain = subject.chain().concat();
@@ -247,7 +270,7 @@ suite('ActionChain', () =>
 			var BuilderA = prepareNewConstructor('A', called);
 			var BuilderB = prepareNewConstructor('B', called);
 			
-			var subject = new ActionChain();
+			var subject = createSubject();
 			var actionRoute = newActionRoute([BuilderA, BuilderB], [[], ['a']]);
 			
 			subject.update(actionRoute, { a: 1 });
@@ -269,7 +292,7 @@ suite('ActionChain', () =>
 			var BuilderA = prepareNewConstructor('A', called);
 			var BuilderB = prepareNewConstructor('B', called);
 			
-			var subject = new ActionChain();
+			var subject = createSubject();
 			var actionRoute = newActionRoute([BuilderA, BuilderB], [[], []]);
 			
 			subject.update(actionRoute, { a: 1 });
@@ -289,7 +312,7 @@ suite('ActionChain', () =>
 			var BuilderA = prepareNewConstructor('A', called);
 			var BuilderB = prepareNewConstructor('B', called);
 			
-			var subject = new ActionChain();
+			var subject = createSubject();
 			var actionRoute = newActionRoute([BuilderA, BuilderB], [[], ['a']]);
 			
 			subject.update(actionRoute, { a: 1 });
@@ -311,7 +334,7 @@ suite('ActionChain', () =>
 			var BuilderB = prepareNewConstructor('B', called);
 			var BuilderC = prepareNewConstructor('C', called);
 			
-			var subject = new ActionChain();
+			var subject = createSubject();
 			var actionRouteA = newActionRoute([BuilderA, BuilderB], [[], []]);
 			var actionRouteB = newActionRoute([BuilderA, BuilderB, BuilderC], [[], [], []]);
 			
@@ -338,7 +361,7 @@ suite('ActionChain', () =>
 			var BuilderB = prepareNewConstructor('B', called);
 			var BuilderC = prepareNewConstructor('C', called);
 			
-			var subject = new ActionChain();
+			var subject = createSubject();
 			var actionRouteA = newActionRoute([BuilderA, BuilderB], [[], ['a']]);
 			var actionRouteB = newActionRoute([BuilderA, BuilderB, BuilderC], [[], ['a'], ['a']]);
 			
@@ -366,7 +389,7 @@ suite('ActionChain', () =>
 			var BuilderA = prepareNewConstructor('A', called);
 			var BuilderB = prepareNewConstructor('B', called);
 			
-			var subject = new ActionChain();
+			var subject = createSubject();
 			var actionRouteA = newActionRoute([BuilderA, BuilderB], [[], []]);
 			var actionRouteB = newActionRoute([BuilderA], [[]]);
 			
@@ -392,7 +415,7 @@ suite('ActionChain', () =>
 			var BuilderA = prepareNewConstructor('A', called);
 			var BuilderB = prepareNewConstructor('B', called);
 			
-			var subject = new ActionChain();
+			var subject = createSubject();
 			var actionRouteA = newActionRoute([BuilderA, BuilderB], [['a'], ['a']]);
 			var actionRouteB = newActionRoute([BuilderA], [['a']]);
 			
@@ -420,7 +443,7 @@ suite('ActionChain', () =>
 			var BuilderB = prepareNewConstructor('B', called);
 			var BuilderC = prepareNewConstructor('C', called);
 			
-			var subject = new ActionChain();
+			var subject = createSubject();
 			var actionRouteA = newActionRoute([BuilderA, BuilderB], [[], ['a']]);
 			var actionRouteB = newActionRoute([BuilderA, BuilderC], [[], ['a']]);
 			
@@ -453,7 +476,7 @@ suite('ActionChain', () =>
 			var BuilderE = prepareNewConstructor('E', called);
 			var BuilderF = prepareNewConstructor('F', called);
 			
-			var subject = new ActionChain();
+			var subject = createSubject();
 			var actionRouteA = newActionRoute([BuilderA, BuilderB, BuilderC, BuilderD], [['a'], ['a', 'b'], ['a', 'b'], ['a', 'b']]);
 			var actionRouteB = newActionRoute([BuilderA, BuilderB, BuilderE, BuilderF], [['a'], ['a', 'b'], ['a', 'b'], ['a', 'b']]);
 			

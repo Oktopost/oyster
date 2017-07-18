@@ -61,13 +61,13 @@ namespace('Oyster.Modules.Utils', function (root)
 		},
 		
 		/**
-		 * @param manager
+		 * @param {Application} app
 		 * @param {string|Module|function|{}|[]} main
 		 * @param {string|Module|function=} extra
 		 * 
 		 * @returns {Module|[]}
 		 */
-		get: function (manager, main, extra)
+		get: function (app, main, extra)
 		{
 			var module = null;
 			var name;
@@ -78,7 +78,7 @@ namespace('Oyster.Modules.Utils', function (root)
 				
 				foreach(main, function (item) 
 				{
-					module = module.concat(ModuleBuilder.get(manager, item));
+					module = module.concat(ModuleBuilder.get(app, item));
 				});
 			}
 			else if (is.string(main))
@@ -96,21 +96,21 @@ namespace('Oyster.Modules.Utils', function (root)
 					throw new Error('Unexpected type passed');
 				}
 				
-				module.setController(new ModuleController(manager, main));
+				module.setController(new ModuleController(app, main));
 			}
 			else if (is.function(main))
 			{
 				module = new main();
 				
 				name = ModuleBuilder._extractName(module, main);
-				module.setController(new ModuleController(manager, name));
+				module.setController(new ModuleController(app, name));
 			}
 			else if (main instanceof Module)
 			{
 				module = main;
 				
 				name = ModuleBuilder._extractName(module);
-				module.setController(new ModuleController(manager, name));
+				module.setController(new ModuleController(app, name));
 			}
 			else if (is.object(main))
 			{
@@ -118,7 +118,7 @@ namespace('Oyster.Modules.Utils', function (root)
 				
 				foreach.pair(main, function (name, item) 
 				{
-					module.push(ModuleBuilder.get(manager, name, item));
+					module.push(ModuleBuilder.get(app, name, item));
 				});
 			}
 			

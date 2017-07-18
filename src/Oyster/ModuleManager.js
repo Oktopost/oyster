@@ -15,18 +15,23 @@ namespace('Oyster', function (root)
 	 * @class {Oyster.ModuleManager}
 	 * @alias {ModuleManager}
 	 * 
-	 * @property {*} _modules
-	 * @property {Loader} _loader
+	 * @param {Application} app
+	 * 
+	 * @property {Application}	_app
+	 * @property {Loader}		_loader
+	 * @property {*}			_modules
 	 * 
 	 * @constructor
 	 */
-	function ModuleManager()
+	function ModuleManager(app)
 	{
 		classify(this);
 		
-		this._modules = {};
+		this._app		= app;
+		this._modules	= {};
+		this._loader	= new Loader(this._register, this._deRegister, this._invokeOnComplete);
+		
 		this._onCompleteCallbacks = [];
-		this._loader = new Loader(this._register, this._deRegister, this._invokeOnComplete);
 	}
 	
 	/**
@@ -81,11 +86,21 @@ namespace('Oyster', function (root)
 	
 	
 	/**
-	 * @param {Module} module
+	 * @param {Module|string} module
 	 * @returns {ModuleManager}
 	 */
 	ModuleManager.prototype.remove = function (module)
 	{
+		if (is.string(module))
+		{
+			if (!is(this._modules[module]))
+			{
+				throw new Error('Module with the name ' + module + ' is not registered!');
+			}
+			
+			module = this._modules[module];
+		}
+		
 		this._loader.unload(module);
 		return this;
 	};
@@ -96,7 +111,7 @@ namespace('Oyster', function (root)
 	 */
 	ModuleManager.prototype.add = function (target, extra)
 	{
-		target = ModuleBuilder.get(this, target, extra);
+		target = ModuleBuilder.get(this._app, target, extra);
 		target = array(target);
 		
 		this._loader.load(target);

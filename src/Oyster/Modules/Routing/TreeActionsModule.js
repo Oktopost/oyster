@@ -49,7 +49,7 @@ namespace('Oyster.Modules.Routing', function (root)
 		this._builder	= new RoutesBuilder();
 		this._router	= new Router(navModule.navigate.bind(navModule), navModule.handleMiss.bind(navModule));
 		this._navigator	= new Navigator(this._router);
-		this._chain		= new ActionChain(this._navigator);
+		this._chain		= new ActionChain(this);
 	};
 	
 	
