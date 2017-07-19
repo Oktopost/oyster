@@ -41,13 +41,11 @@ Action A
 			path n
 ```
 
-The users initial location is *https://...domain.../a/b/__d__?prm1=1&prm2=__2__*
-According to the configuration, the currently loaded **Actions Chain** that corresponds to this 
-route is: **A** -> **B** -> **C'** -> **D**
+The users initial location is *https://...domain.../a/b/__d__?prm1=1&prm2=__2__* and according to the configuration, 
+the currently loaded **Actions Chain** is: **A** -> **B** -> **C'** -> **D**
 
-The user than navigates to *https://...domain.../a/b/__n__?prm1=1&prm2=__3__*.
-**Actions Chain** corresponding to this new target route is **A** -> **B** -> **N**
-
+The user than navigates to *https://...domain.../a/b/__n__?prm1=1&prm2=__3__*, new **Actions Chain** corresponding 
+to this route is **A** -> **B** -> **N**
 
 In this scenario, the next list of steps must be executed during the **Actions Chain** update:
 
@@ -64,19 +62,18 @@ The update sequence on route change is executed as follows:
 2. **initialize** on actions to be mounted.
 3. The chain state is updated to match the new target chain.
 4. **refresh** on all unmodified actions.
-5. **update** and **execute** on all still mounted actions which parameters has changed.
+5. **update** and **execute** on all still mounted actions which parameters had been changed.
 6. **activate** and **execute** on all newly mounted actions.
 7. Asynchronous call to **destroy** on all unmounted actions.
 
-Note that each step is performed on parents first. For example the **preDestroy** action is called
-first on **C'** action and then on **D** action.
-
+Note that each step is performed on parents first. For example the **preDestroy** method is called
+first on **C'** and then **D**.
 
 ### Actions constructor
 
-Unmounted actions are never reused. When a new action is mounted, it will always be a new instances that was 
-never mounted before. However, there is no promise to when the new action is actually created, therefore
-you must not use the constructor of the action for it's initialization. For this purpose, 
+Unmounted actions are never reused. When a new action is mounted, it will always be a newly created instances.
+However, there is no promise to when the new action is actually constructed, therefore
+you must never use the constructor of the action for it's initialization. For this purpose, 
 the **Action.initialize** method exists.
 
 ### preDestroy(newParams, prevParams)
@@ -84,7 +81,7 @@ the **Action.initialize** method exists.
 > Target Actions: **C'** and **D**
 
 This **preDestroy** method is invoked on all the actions that should be unmount and are no longer present in 
-the new action chain.
+the new **Actions chain**.
 
 ### Setup
 
@@ -108,7 +105,7 @@ The refresh action is invoked all on Actions that have not changed.
 
 > Target Action: **B**
 
-The **update** method is invoked on all actions which mounted state did not change, but one of the action parameters did.
+The **update** method is invoked on all actions which mounted state did not change, but action's parameters did.
 Note that the **execute** method is also invoked for same actions at this point.
 
 ### activate(newParams, prevParams)
@@ -131,7 +128,7 @@ So if the updated/mounted actions are **B** -> **N** the call sequence will be:
 3. **N.activate(...)**
 4. **N.execute(...)**
 
-This method covers the case when same operation must be executed, both during the **update** and **activate** stages.
+This method should be used when same operation must be executed both during the **update** and **activate** stages.
 
 ### destroy(newParams, prevParams)
 
@@ -145,13 +142,14 @@ The **destroy** method invoked on all actions at once and not asynchronously per
 ## Initial Load
 
 There is no real difference between first time load and any following load. On the first load, the initial **Actions Chain** 
-is treated as an empty array, as if there is no Actions to unmount or update. 
+is treated as an empty array - as if there is no Actions to unmount, update or refresh. 
 
 ## Notes
 
-- During preDestroy call, the state of the chain is still not updated, and *Action.params()* method will return
-previous route's parameters instead of the new parameters.
+- During **preDestroy** call, the state of the chain is still not updated, and *Action.params()* method will return
+previous route's parameters instead of the new once.
 - Unlike Modules, Actions' update methods may not be defined. The parent **Oyster.Action** class does not have 
 the **preDestroy**, **initialize**, **refresh**, **update**, **activate**, **execute** or **destroy** methods in
 it's prototype.
 - All methods in the Update sequence, excluding **destroy**, are invoked synchronously one after another.
+- Exceptions will not break the loading sequence.
