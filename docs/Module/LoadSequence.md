@@ -20,7 +20,7 @@ Next operations are applied for each instance of **L** or **U** modules in the o
 
 ## Pre condition
 
-Assuming the state of the module manger as follows:
+Assuming the state of the module manger is as follows:
 
 * Loaded modules: **M1**, **M2**, **U1**, **U2**
 
@@ -37,7 +37,7 @@ Assuming the state of the module manger as follows:
 
 ## 1. Invoke (**L1**, **L2**).initialize()
 
-The initialize method invoked on all the modules targeted to be mounted. 
+The initialize method is invoked on all the modules targeted to be mounted. 
 Note that at this point the **isLoaded** flag of those modules is still **false**. 
 
 ```js
@@ -85,7 +85,7 @@ u2.postUnload();
 
 ## 6. Mount **L1** and **L2**
 
-All modules targeted for mount are mounted by the module manager. This modules are now can be obtained 
+All modules targeted for mount are mounted by the module manager. These modules are now can be obtained 
 through the *get* method of the module manager.
  
 * New module manager's state is: **M1**, **M2**, **L1**, **L2**
@@ -114,7 +114,7 @@ l2.onLoad();
 
 ## 9. Invoke (**L1**, **L2**).postLoad()
 
-The postLoad methods invoked on all mounted modules.
+The postLoad methods is invoked on all mounted modules.
 
 ```js
 l1.postLoad();
