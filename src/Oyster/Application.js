@@ -31,11 +31,14 @@ namespace('Oyster', function (root)
 	{
 		if (!is(config)) return this._modules;
 		else if (is.string(config)) return this._modules.get(config);
-		else
+		else if (is.function(config))
 		{
-			this._modules.add(config);
-			return this;
+			if (is.string(config.moduleName)) return this._modules.get(config.moduleName);
+			else if (is.function(config.moduleName)) return this._modules.get(config.moduleName());
 		}
+		
+		this._modules.add(config);
+		return this;
 	};
 	
 	/**

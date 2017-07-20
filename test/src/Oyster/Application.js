@@ -108,7 +108,7 @@ suite('Application', () =>
 			function NavModule() {}
 			inherit(NavModule, BaseNavigationModule);
 			
-			app.modules().add(NavModule);
+			app.modules().add(new NavModule());
 			
 			return (func.postponed(() => 
 			{
@@ -122,6 +122,54 @@ suite('Application', () =>
 		
 			function NavModule() {}
 			inherit(NavModule, BaseNavigationModule);
+			
+			app.modules(new NavModule());
+			
+			return (func.postponed(() => 
+			{
+				assert.isTrue(app.modules().has(BaseNavigationModule));
+			}, 1))();
+		});
+		
+		test('Pass constructor with moduleName function, instance returned', () => 
+		{
+			var app = new Application();
+		
+			function NavModule() {}
+			inherit(NavModule, BaseNavigationModule);
+			NavModule.moduleName = BaseNavigationModule.moduleName;
+			
+			app.modules().add(new NavModule());
+			
+			return (func.postponed(() => 
+			{
+				assert.instanceOf(app.modules(NavModule), BaseNavigationModule);
+			}, 1))();
+		});
+		
+		test('Pass constructor with moduleName string, instance returned', () => 
+		{
+			var app = new Application();
+		
+			function NavModule() {}
+			inherit(NavModule, BaseNavigationModule);
+			NavModule.moduleName = BaseNavigationModule.moduleName();
+			
+			app.modules().add(new NavModule());
+			
+			return (func.postponed(() => 
+			{
+				assert.instanceOf(app.modules(NavModule), BaseNavigationModule);
+			}, 1))();
+		});
+		
+		test('Pass constructor with invalid moduleName, module added', () => 
+		{
+			var app = new Application();
+		
+			function NavModule() {}
+			inherit(NavModule, BaseNavigationModule);
+			NavModule.moduleName = 2;
 			
 			app.modules(NavModule);
 			
