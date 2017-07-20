@@ -58,15 +58,15 @@ suite('ModuleManager', () =>
 			subject.add(module);
 			subject.onLoaded(() => 
 			{
-				calledSeq.push('b'); 
+				calledSeq.push('b');
 				module.moduleName = 'mod2';
 				subject.add(module);
 			});
 			
 			return (func.postponed(() => 
-				{ 
+				{
 					assert.deepEqual(calledSeq, ['a', 'b', 'a']); 
-				}, 
+				},
 				2))();
 		});
 	});
@@ -140,7 +140,6 @@ suite('ModuleManager', () =>
 				}, 
 				1))();
 		});
-		
 		
 		test('Module already existed, exception thrown', () => 
 		{

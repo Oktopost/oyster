@@ -1,6 +1,6 @@
 # Actions Chain update sequence
 
-## Table Of Contents
+#### Table Of Contents
 
   * [Pre Condition](#pre-condition)
   * [Update Sequence](#update-sequence)
@@ -42,9 +42,9 @@ Action A
 ```
 
 The users initial location is *https://...domain.../a/b/__d__?prm1=1&prm2=__2__* and according to the configuration, 
-the currently loaded **Actions Chain** is: **A** -> **B** -> **C'** -> **D**
+currently loaded **Actions Chain** is: **A** -> **B** -> **C'** -> **D**
 
-The user than navigates to *https://...domain.../a/b/__n__?prm1=1&prm2=__3__*, new **Actions Chain** corresponding 
+The user then navigates to *https://...domain.../a/b/__n__?prm1=1&prm2=__3__*, the new **Actions Chain** corresponding 
 to this route is **A** -> **B** -> **N**
 
 In this scenario, the next list of steps must be executed during the **Actions Chain** update:
@@ -71,7 +71,7 @@ first on **C'** and then **D**.
 
 ### Actions constructor
 
-Unmounted actions are never reused. When a new action is mounted, it will always be a newly created instances.
+Unmounted actions are never reused. When a new action is mounted, it will always be a newly created instance.
 However, there is no promise to when the new action is actually constructed, therefore
 you must never use the constructor of the action for it's initialization. For this purpose, 
 the **Action.initialize** method exists.
@@ -117,11 +117,11 @@ per instance. Note that the **execute** method is also invoked for same actions 
 
 ### execute(newParams, prevParams) 
 
-> Target Actions: **B** and **N**
+> Target Actions: **B** and **N**	
 
 The **execute** method is called on any action which parameters were modified or it was just mounted. It is always 
 called right after **update** or **active** on the same action.
-So if the updated/mounted actions are **B** -> **N** the call sequence will be:
+So, if the updated/mounted actions are **B** -> **N** the call sequence will be:
 
 1. **B.update(...)**
 2. **B.execute(...)**
@@ -142,12 +142,12 @@ The **destroy** method invoked on all actions at once and not asynchronously per
 ## Initial Load
 
 There is no real difference between first time load and any following load. On the first load, the initial **Actions Chain** 
-is treated as an empty array - as if there is no Actions to unmount, update or refresh. 
+is treated as an empty array - as if there are no Actions to unmount, update or refresh. 
 
 ## Notes
 
 - During **preDestroy** call, the state of the chain is still not updated, and *Action.params()* method will return
-previous route's parameters instead of the new once.
+previous route's parameters instead of the new ones.
 - Unlike Modules, Actions' update methods may not be defined. The parent **Oyster.Action** class does not have 
 the **preDestroy**, **initialize**, **refresh**, **update**, **activate**, **execute** or **destroy** methods in
 it's prototype.
