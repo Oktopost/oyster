@@ -20,7 +20,7 @@ suite('Application', () =>
 		var app = new Application();
 		var module = new BaseRoutingModule();
 		
-		global.window = { location: { pathname: '/ma/url' } };
+		global.window = { location: { pathname: '/ma/url', search: '' } };
 		app.modules().add(module);
 		module.handleURL = (a) => { calledWith = a; };
 		
