@@ -50,7 +50,7 @@ namespace('Oyster', function (root)
 			{
 				/** @var {BaseRoutingModule} */
 				var actionsModule = this.modules(OysterModules.RoutingModule);
-				actionsModule.handleURL(window.location.pathname);
+				actionsModule.handleURL(window.location.pathname + window.location.search);
 			})
 			.bind(this));
 	};
