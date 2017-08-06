@@ -12,14 +12,26 @@ suite('Action', () =>
 	{
 		var subject = new Action();
 		
-		var chainLink = {a: 1};
+		var chainLink = { a: 1 };
 		var params = { b: 2 };
 		
 		subject.setChainLink(chainLink);
 		subject.setParams(params);
 		
-		assert.strictEqual(subject.params(), params);
+		assert.deepEqual(subject.params(), params);
 		assert.strictEqual(subject.chain(), chainLink);
+	});
+	
+	test('params returns copy', () => 
+	{
+		var subject = new Action();
+		
+		var params = { b: 2 };
+		
+		subject.setParams(params);
+		subject.params().b = 3;
+		
+		assert.deepEqual(subject.params(), params);
 	});
 	
 	test('navigation', () => 

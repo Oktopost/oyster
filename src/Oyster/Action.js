@@ -1,6 +1,7 @@
 namespace('Oyster', function (root)
 {
-	var classify = root.Classy.classify;
+	var obj			= root.Plankton.obj;
+	var classify	= root.Classy.classify;
 
 
 	/**
@@ -56,7 +57,7 @@ namespace('Oyster', function (root)
 	 */
 	Action.prototype.params = function ()
 	{
-		return this._params;
+		return obj.copy(this._params);
 	};
 	
 	/**
