@@ -2,6 +2,8 @@ const root = require('../../../index');
 const assert = require('chai').assert;
 
 
+const Action			= root.Oyster.Action;
+const ActionEvents		= root.Oyster.Modules.Routing.TreeActions.ActionEvents;
 const ActionChainLoader	= root.Oyster.Actions.ActionChainLoader;
 
 
@@ -23,6 +25,7 @@ suite('ActionChainLoader', () =>
 				action: ((i) => () => 
 				{
 					return {
+						events:		() => new ActionEvents(),
 						preDestroy: (p1, p2) => invoked.push(['preDestroy',		'a' + i, p1, p2]),
 						initialize: (p1, p2) => invoked.push(['initialize',		'a' + i, p1, p2]),
 						refresh:	(p1, p2) => invoked.push(['refresh',		'a' + i, p1, p2]),
@@ -212,5 +215,26 @@ suite('ActionChainLoader', () =>
 		{
 			console.error = original;
 		}
+	});
+	
+	
+	
+	suite('invokePreDestroy', () => 
+	{
+		test('onDestroy event triggered on action', () => 
+		{
+			var isCalled = false;
+			var action = new Action();
+			
+			action.events().onDestroy(() => { isCalled = true; });
+			
+			ActionChainLoader.invokePreDestroy(
+				[
+					{ action: () => action }
+				],
+				{}, {});
+			
+			assert.equal(isCalled, true);
+		});
 	});
 });

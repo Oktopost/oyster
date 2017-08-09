@@ -2,8 +2,12 @@ const root = require('../../index');
 const assert = require('chai').assert;
 
 
+const LifeTime		= root.Duct.LifeTime;
+var LifeBindFactory	= root.Duct.LT.LifeBindFactory;
+
 const Action		= root.Oyster.Action;
 const Application	= root.Oyster.Application;
+const ActionEvents	= root.Oyster.Modules.Routing.TreeActions.ActionEvents;
 
 
 suite('Action', () => 
@@ -20,6 +24,22 @@ suite('Action', () =>
 		
 		assert.deepEqual(subject.params(), params);
 		assert.strictEqual(subject.chain(), chainLink);
+	});
+	
+	test('events', () => 
+	{
+		var subject = new Action();
+		
+		assert.instanceOf(subject.events(), ActionEvents);
+		assert.deepEqual(subject.events(), subject.events());
+	});
+	
+	test('LT', () => 
+	{
+		var subject = new Action();
+		
+		assert.instanceOf(subject.LT(), LifeTime);
+		assert.deepEqual(subject.LT(), subject.LT());
 	});
 	
 	test('params returns copy', () => 
@@ -62,12 +82,43 @@ suite('Action', () =>
 		assert.strictEqual(subject.app(), app); 
 	});
 	
+	suite('LifeTime', () => 
+	{
+		test('Action is destroyed - Lifetime object is killed', () => 
+		{
+			var isKilled = false;
+			var subject = new Action();
+			
+			subject.LT().bindToLife(() => {}, () => { isKilled = true; });
+			
+			
+			subject.events().triggerDestroy();
+			
+			
+			assert.isTrue(isKilled);
+		});
+		
+		
+		test('LifeTime object is extracted from Action', () => 
+		{
+			var action = new Action();
+			
+			var lifeTime = LifeBindFactory.instance().get(action);
+			
+			assert.strictEqual(lifeTime, action.LT());
+		});
+		
+		test('Non action passed to lifeTimeBuilder, return null', () => 
+		{
+			assert.isNull(Action.lifeTimeBuilder(123));
+		});
+	});
+	
 	suite('modules', () => 
 	{
 		test('app not set, return null', () =>
 		{
 			var subject = new Action();
-			var app = new Application();
 			
 			subject.setChainLink({ app: () => null });
 			

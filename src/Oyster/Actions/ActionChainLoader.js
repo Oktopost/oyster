@@ -66,6 +66,9 @@ namespace('Oyster.Actions', function (root)
 			foreach(actions, function (item)
 			{
 				ActionChainLoader._invokeMethod(item.action(), 'preDestroy', [params, prevParams]);
+				
+				var events = item.action().events();
+				events.triggerDestroy();
 			});
 		},
 		

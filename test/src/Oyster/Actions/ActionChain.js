@@ -12,6 +12,7 @@ const Application		= root.Oyster.Application;
 const ActionChain		= root.Oyster.Actions.ActionChain;
 const ActionChainLink	= root.Oyster.Actions.ActionChainLink;
 const TreeActionsModule	= root.Oyster.Modules.Routing.TreeActionsModule;
+const ActionEvents		= root.Oyster.Modules.Routing.TreeActions.ActionEvents;
 const ModuleController	= root.Oyster.Modules.Utils.ModuleController;
 
 const ActionRoute		= root.Oyster.Routing.ActionRoute;
@@ -38,6 +39,8 @@ suite('ActionChain', () =>
 	{
 		function ActionConstructor()
 		{
+			Action.call(this);
+			
 			foreach.pair(methods || [], function (name, callback)
 			{
 				this[name] = callback;
@@ -52,6 +55,7 @@ suite('ActionChain', () =>
 	function prepareNewConstructor(name, stack)
 	{
 		return createNewConstructor({
+			events:		() => { return new ActionEvents() },
 			initialize: function (a, b) { stack.push(['initialize', name, a, b]); },
 			refresh: 	function (a, b) { stack.push(['refresh', name, a, b]); },
 			execute: 	function (a, b) { stack.push(['execute', name, a, b]); },
