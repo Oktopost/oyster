@@ -63,6 +63,15 @@ namespace('Oyster.Modules.Utils', function (root)
 	};
 
 	/**
+	 * @param {Module[]} modules
+	 * @private
+	 */
+	LoadSequence.prototype._destroyLT = function (modules)
+	{
+		foreach(modules, function (module) { module.LT().kill(); });
+	};
+
+	/**
 	 * @param {Module[]} toLoad
 	 * @param {Module[]} toUnload
 	 */
@@ -72,6 +81,7 @@ namespace('Oyster.Modules.Utils', function (root)
 		
 		this._invoke(toUnload, 'preUnload');
 		this._setIsLoaded(toUnload, false);
+		this._destroyLT(toUnload, false);
 		this._invoke(toUnload, 'onUnload');
 		
 		foreach(toUnload, function (module) { this._onUnloadCallback(module); }, this);

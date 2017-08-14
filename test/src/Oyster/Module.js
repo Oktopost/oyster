@@ -2,6 +2,9 @@ const root = require('../../index');
 const assert = require('chai').assert;
 
 
+const LifeTime			= root.Duct.LifeTime;
+const LifeBindFactory	= root.Duct.LT.LifeBindFactory;
+
 const Module = root.Oyster.Module;
 
 
@@ -37,6 +40,30 @@ suite('Module', () =>
 		subject.setController(controller);
 		
 		assert.strictEqual(obj, subject.app());
+	});
+	
+	test('LT', () => 
+	{
+		var subject = new Module();
+		assert.instanceOf(subject.LT(), LifeTime);
+	});
+	
+	
+	suite('LifeTime', () => 
+	{
+		test('LifeTime object is extracted from Module', () => 
+		{
+			var m = new Module();
+			
+			var lifeTime = LifeBindFactory.instance().get(m);
+			
+			assert.strictEqual(lifeTime, m.LT());
+		});
+		
+		test('Non action passed to lifeTimeBuilder, return null', () => 
+		{
+			assert.isNull(Module.lifeTimeBuilder(123));
+		});
 	});
 	
 	

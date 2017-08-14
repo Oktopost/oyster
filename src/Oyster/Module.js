@@ -1,5 +1,8 @@
 namespace('Oyster', function (root)
 {
+	var LifeTime		= root.Duct.LifeTime;
+	var LifeBindFactory	= root.Duct.LT.LifeBindFactory;
+	
 	var classify = root.Classy.classify;
 
 
@@ -15,7 +18,8 @@ namespace('Oyster', function (root)
 	{
 		classify(this);
 		
-		this._controller = null;
+		this._controller 	= null;
+		this._lt			= new LifeTime();
 	}
 	
 	
@@ -33,6 +37,14 @@ namespace('Oyster', function (root)
 	Module.prototype.control = function ()
 	{
 		return this._controller;
+	};
+	
+	/**
+	 * @return {LifeTime}
+	 */
+	Module.prototype.LT = function ()
+	{
+		return this._lt;
 	};
 	
 	/**
@@ -63,6 +75,17 @@ namespace('Oyster', function (root)
 	Module.prototype.postUnload = function () {};
 	
 	Module.prototype.destroy = function () {};
+	
+	
+	Module.lifeTimeBuilder = function (item)
+	{
+		return item instanceof Module ? 
+			item.LT() : 
+			null;
+	};
+	
+	
+	LifeBindFactory.instance().addBuilder(Module.lifeTimeBuilder);
 	
 	
 	this.Module = Module;

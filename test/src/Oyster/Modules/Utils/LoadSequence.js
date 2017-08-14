@@ -10,8 +10,9 @@ const LoadSequence	= root.Oyster.Modules.Utils.LoadSequence;
 
 function TestModule() 
 {
-	var self = this;
+	Module.call(this);
 	
+	var self = this;
 	
 	self.add = function() {};
 	
@@ -107,6 +108,18 @@ suite('LoadSequence', () =>
 		assert.equal(true, sameMethodCalled);
 	});
 	
+	test('LifeTime object destroyed', () => 
+	{
+		var isCalled = false;
+		var module = new TestModule();
+		var subject = new LoadSequence((o) => {}, (o) => {});
+		
+		module.LT().onKill(() => { isCalled = true; });
+		
+		assert.isFalse(isCalled);
+		subject.execute([], [module]);
+		assert.isTrue(isCalled);
+	});
 	
 	test('error handling sanity', () => 
 	{
