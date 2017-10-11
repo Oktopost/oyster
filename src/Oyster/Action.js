@@ -47,6 +47,14 @@ namespace('Oyster', function (root)
 	};
 	
 	/**
+	 * @returns {boolean}
+	 */
+	Action.prototype.isMounted = function ()
+	{
+		return this._chainLink.isMounted();
+	};
+	
+	/**
 	 * @returns {Application}
 	 */
 	Action.prototype.app = function ()

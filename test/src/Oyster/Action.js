@@ -42,6 +42,19 @@ suite('Action', () =>
 		assert.deepEqual(subject.LT(), subject.LT());
 	});
 	
+	test('isMounted', () => 
+	{
+		var subject = new Action();
+		
+		//noinspection JSValidateTypes
+		subject._chainLink = { isMounted: function () { return true; } };
+		assert.equal(subject.isMounted(), true);
+		
+		//noinspection JSValidateTypes
+		subject._chainLink = { isMounted: function () { return false; } };
+		assert.equal(subject.isMounted(), false);
+	});
+	
 	test('params returns copy', () => 
 	{
 		var subject = new Action();

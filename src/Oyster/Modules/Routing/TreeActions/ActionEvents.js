@@ -51,7 +51,6 @@ namespace('Oyster.Modules.Routing.TreeActions', function (root)
 	ActionEvents.prototype.triggerDestroy = function () 
 	{
 		this._onDestroy.trigger();
-		
 		this._onDestroy.destroy();
 	};
 	
