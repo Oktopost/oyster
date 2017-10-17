@@ -21,6 +21,8 @@ namespace('Oyster.Modules.Utils', function (root)
 		 */
 		_extractName: function (a, b)
 		{
+			var name;
+			
 			if (is.string(a))
 			{
 				return a;
@@ -28,20 +30,34 @@ namespace('Oyster.Modules.Utils', function (root)
 			
 			if (is(a['moduleName']))
 			{
-				var name;
-				
 				if (is.string(a['moduleName']))
 				{
-					name = a['moduleName'];
+					return a['moduleName'];
 				}
 				else if (is.function(a['moduleName']))
 				{
 					name = a['moduleName']();
+					
+					if (is.string(name))
+					{
+						return name;
+					}
 				}
-				
-				if (is.string(name))
+			}
+			else if (is(a.constructor) && is(a.constructor.moduleName))
+			{
+				if (is.string(a.constructor.moduleName))
 				{
-					return name;
+					return a.constructor.moduleName;
+				}
+				else if (is.function(a.constructor.moduleName))
+				{
+					name = a.constructor.moduleName();
+					
+					if (is.string(name))
+					{
+						return name;
+					}
 				}
 			}
 			

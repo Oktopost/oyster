@@ -97,6 +97,38 @@ suite('ModuleBuilder', () =>
 			assert.throws(() => { ModuleBuilder.get(new Application(), new TestModuleA()); });
 		});
 		
+		test('Pass instance with static name', () => 
+		{
+			var app = new Application();
+			var obj = new TestModuleStaticWithNameMethod();
+			var res = ModuleBuilder.get(app, obj);
+			
+			assert.strictEqual(res, obj);
+			assert.equal(obj.control().name(), TestModuleStaticWithNameMethod.moduleName());
+			assert.equal(obj.control().app(), app);
+		});
+		
+		test('Pass instance with invalid static name', () => 
+		{
+			assert.throws(() => { ModuleBuilder.get(new Application(), new TestModuleStaticWithNameInvalid()) });
+		});
+		
+		test('Pass instance with static name method', () => 
+		{
+			var app = new Application();
+			var obj = new TestModuleStaticWithName();
+			var res = ModuleBuilder.get(app, obj);
+			
+			assert.strictEqual(res, obj);
+			assert.equal(obj.control().name(), TestModuleStaticWithName.moduleName);
+			assert.equal(obj.control().app(), app);
+		});
+		
+		test('Pass instance with invalid static name method', () => 
+		{
+			assert.throws(() => { ModuleBuilder.get(new Application(), new TestModuleStaticWithNameMethodInvalid()) });
+		});
+		
 		
 		test('Pass constructor with static name', () => 
 		{
