@@ -103,7 +103,7 @@ namespace('Oyster.Modules.Utils', function (root)
 		this._pendingLoad.push({});
 		this._pendingUnload.push({});
 		
-		foreach(array(module), function (item) { this._append(this._pendingLoad, item); }, this);
+		foreach(array(module), this, function (item) { this._append(this._pendingLoad, item); });
 		
 		this._schedule();
 	};
@@ -116,7 +116,7 @@ namespace('Oyster.Modules.Utils', function (root)
 		this._pendingLoad.push({});
 		this._pendingUnload.push({});
 		
-		foreach(array(module), function (item) { this._append(this._pendingUnload, item); }, this);
+		foreach(array(module), this, function (item) { this._append(this._pendingUnload, item); });
 		
 		this._schedule();
 	};

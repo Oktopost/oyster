@@ -1,6 +1,6 @@
 {
   "name": "oktopost-oyster",
-  "version": "1.0.1",
+  "version": "1.1.0",
   "description": "",
   "main": "index.js",
   "scripts": {
@@ -10,11 +10,11 @@
   "author": "",
   "license": "MIT",
   "dependencies": {
-    "oktopost-duct": "^1.0.1",
-    "oktopost-classy": "^1.0.3",
+    "oktopost-duct": "^1.1.0",
+    "oktopost-classy": "^1.1.0",
     "oktopost-namespace": "^2.0.0",
-    "oktopost-plankton": "^1.1.0",
-    "oktopost-sea-route": "^1.0.4"
+    "oktopost-plankton": "^2.1.0",
+    "oktopost-sea-route": "^1.1.0"
   },
   "devDependencies": {
     "chai": "^3.5.0",

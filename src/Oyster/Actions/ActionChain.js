@@ -67,7 +67,7 @@ namespace('Oyster.Actions', function (root)
 		
 		for (foundIndex = 0; foundIndex < target.modified.length; foundIndex++)
 		{
-			foreach(paramNames[foundIndex], function (paramName) 
+			foreach(paramNames[foundIndex], this, function (paramName) 
 			{
 				if (is(checked[paramName]))
 				{
@@ -82,7 +82,7 @@ namespace('Oyster.Actions', function (root)
 					found = true;
 					return false;
 				}
-			}, this);
+			});
 			
 			if (found) break;
 		}
@@ -144,7 +144,7 @@ namespace('Oyster.Actions', function (root)
 		var index = 0;
 		var last = this._chain.length - 1;
 		
-		foreach(this._chain,
+		foreach(this._chain, this, 
 			/**
 			 * @param {ActionChainLink} item
 			 */
@@ -161,8 +161,7 @@ namespace('Oyster.Actions', function (root)
 				item.action().setParams(params);
 				
 				index++;
-			},
-			this);
+			});
 	};
 	
 	/**

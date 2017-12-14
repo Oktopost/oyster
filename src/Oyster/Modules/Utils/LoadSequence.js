@@ -39,7 +39,7 @@ namespace('Oyster.Modules.Utils', function (root)
 	 */
 	LoadSequence.prototype._invoke = function (set, method)
 	{
-		foreach(set, function (module)
+		foreach(set, this, function (module)
 		{
 			try 
 			{
@@ -49,7 +49,7 @@ namespace('Oyster.Modules.Utils', function (root)
 			{
 				this._handleException(method, module, error);
 			}
-		}, this);
+		});
 	};
 
 	/**
@@ -84,9 +84,9 @@ namespace('Oyster.Modules.Utils', function (root)
 		this._destroyLT(toUnload, false);
 		this._invoke(toUnload, 'onUnload');
 		
-		foreach(toUnload, function (module) { this._onUnloadCallback(module); }, this);
+		foreach(toUnload, this, function (module) { this._onUnloadCallback(module); });
 		this._invoke(toUnload, 'postUnload');
-		foreach(toLoad, function (module) { this._onLoadCallback(module); }, this);
+		foreach(toLoad, this, function (module) { this._onLoadCallback(module); });
 		
 		this._invoke(toLoad, 'preLoad');
 		this._setIsLoaded(toLoad, true);

@@ -41,10 +41,10 @@ suite('ActionChain', () =>
 		{
 			Action.call(this);
 			
-			foreach.pair(methods || [], function (name, callback)
+			foreach.pair(methods || [], this, function (name, callback)
 			{
 				this[name] = callback;
-			}, this);
+			});
 		}
 		
 		inherit(ActionConstructor, Action);
