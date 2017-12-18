@@ -1,7 +1,7 @@
 namespace('Example', function (window)
 {
 	var TreeActionsModule			= window.Oyster.Modules.Routing.TreeActionsModule;
-	var HistoryJsNavigationModule	= window.Example.Modules.HistoryJsNavigationModule;
+	var getSimpleNavigationModule	= window.Example.Modules.getSimpleNavigationModule;
 	
 	var Application		= window.Oyster.Application;
 	var PathMatchRoutes	= window.Example.PathMatch.PathMatchRoutes;
@@ -11,7 +11,7 @@ namespace('Example', function (window)
 	{
 		Application.create(
 			[
-				HistoryJsNavigationModule,
+				getSimpleNavigationModule(),
 				TreeActionsModule
 			], 
 			function setupApplication(app, routing)
