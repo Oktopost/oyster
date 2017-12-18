@@ -153,3 +153,8 @@ the **preDestroy**, **initialize**, **refresh**, **update**, **activate**, **exe
 it's prototype.
 - All methods in the Update sequence, excluding **destroy**, are invoked synchronously one after another.
 - Exceptions will not break the loading sequence.
+
+
+#### References
+
+- [Action Chain Tutorial: Intro](./Intro.md)
