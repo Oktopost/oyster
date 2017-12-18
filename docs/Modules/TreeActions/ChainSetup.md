@@ -1,6 +1,6 @@
 #### Table of Contents
 
-  * [Path Matching](#path-matching)
+  * [Action Chain](#action-chain)
   * [Routing Config](#routing-config)
   * [Running the Example](#running-the-example)
   * [References](#references)
@@ -8,13 +8,13 @@
 
 ### Action Chain
 
-An array of actions mapped to a specific URL path, is name an **Action Chain**.
+An array of actions mapped to a specific URL path named **Action Chain**.
 
-Each time a new URL is parsed currently mounted chain will be replaced by the new chain. However, if a number 
-of actions at the start of the mounted chain are the same as in the new target chain, this actions will remain mounted.
-This action is refereed to as **Action Chain Update**.
+Each time a new URL is parsed, currently mounted chain will be replaced by the new target chain. 
+However, if number of actions at the start of the mounted chain are the same as in the new 
+target chain, this actions will remain mounted. The process of switching chains is refereed to as **Action Chain Update**.
 
-In this example, **Action Chain Update** is demonstrated.
+In this example such process is demonstrated.
 
 
 ### Routing Config
@@ -58,16 +58,15 @@ namespace('Example.ChainSetup', function (window)
 When parsing the configuration, any object under the `$` key, is treated as part of the chain config.
 All objects on the same level as the `$` key, are considered child configurations of the `$`'s configuration. 
 
-Child configuration's path is combined with the parent path, the resulting path, it the path which will match this
-Parent Action -> Child Action chain. 
+Child configuration's path is combined with the parent path. The resulting path, it the path which will match this
+`Parent Action -> Child Action` chain. 
 
 In the example above, `FirstChild` is the child of the `MainAction`. While `SecondChild` is the child for the 
-`FirstChild` config.
+`FirstChild` config:
 
 * URL `/chain` will match the chain `MainAction` 
 * URL `/chain/first` will match the chain `MainAction -> FirstAction`
 * URL `/chain/first/second` will match the chain `MainAction -> FirstAction -> SecondAction`
-
 
 
 ### Running the Example
@@ -75,7 +74,7 @@ In the example above, `FirstChild` is the child of the `MainAction`. While `Seco
 1. In terminal navigate to the docs directory.
 2. Navigate to Modules/TreeRouting/Examples
 3. Run `npm start`, this will install dependencies, compile resources and start an express server.
-  Express Server can be stopped by pressing `Ctrl + C`
+Express Server can be stopped by pressing `Ctrl + C`
 4. Open the browser and developer tools.
 5. Navigate to [http://127.0.0.1:3800/chain](http://127.0.0.1:3800/path_match)
 
