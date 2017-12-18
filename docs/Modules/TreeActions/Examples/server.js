@@ -22,6 +22,21 @@ app.get('/different/path', function (req, res)
 	res.sendFile(__dirname + '/PathMatching/PathMatching.html');
 });
 
+app.get('/chain', function (req, res)
+{
+	res.sendFile(__dirname + '/ChainSetup/ChainSetup.html');
+});
+
+app.get('/chain/first', function (req, res)
+{
+	res.sendFile(__dirname + '/ChainSetup/ChainSetup.html');
+});
+
+app.get('/chain/first/second', function (req, res)
+{
+	res.sendFile(__dirname + '/ChainSetup/ChainSetup.html');
+});
+
 
 app.listen(3800, function () 
 {

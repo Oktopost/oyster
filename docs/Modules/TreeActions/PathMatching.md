@@ -1,6 +1,3 @@
-[Action Loading Sequence](ActionLoadSequence.md)
-
-
 #### Table of Contents
 
   * [Path Matching](#path-matching)
@@ -94,4 +91,8 @@ MainAction was destroyed
 
 #### References
 
-[Action Loading Sequence](ActionLoadSequence.md)
+- [Example Files](./Examples/src/Example/PathMatch)
+- [Action Loading Sequence](ActionLoadSequence.md)
+
+
+[<- Prev: Intro](Intro.md) | [Next: Actions Chain Setup ->](ChainSetup.md)

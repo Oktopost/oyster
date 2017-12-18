@@ -20,6 +20,7 @@ function getDependencies()
 		{
 			var load = [
 				root.Example.IntroExample,
+				root.Example.ChainExample,
 				root.Example.PathMatchExample
 			];
 		});
