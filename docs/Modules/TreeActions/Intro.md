@@ -66,6 +66,8 @@ In the example above, a route configurations is:
 
 Here, the url `/intro` is mapped to the action `IntroAction` which is an alias to `Example.Intro.IntroAction`.
 
+Also in this case the a url is mapped only to one actions. 
+
 
 #### Simple Action Setup 
 
