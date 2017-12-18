@@ -8,11 +8,13 @@
 
 ### Action Chain
 
-An array of actions mapped to a specific URL path named **Action Chain**.
+An array of actions mapped to a specific URL path is named **Action Chain**.
 
 Each time a new URL is parsed, currently mounted chain will be replaced by the new target chain. 
 However, if number of actions at the start of the mounted chain are the same as in the new 
-target chain, this actions will remain mounted. The process of switching chains is refereed to as **Action Chain Update**.
+target chain, these actions will remain mounted. The process of switching chains is refereed to as **Action Chain Update**.
+
+For a more in depth example see [Action Loading Sequence](ActionLoadSequence.md) documentation.
 
 In this example such process is demonstrated.
 
@@ -58,10 +60,10 @@ namespace('Example.ChainSetup', function (window)
 When parsing the configuration, any object under the `$` key, is treated as part of the chain config.
 All objects on the same level as the `$` key, are considered child configurations of the `$`'s configuration. 
 
-Child configuration's path is combined with the parent path. The resulting path, it the path which will match this
+Child configuration's path is combined with the parent path. The resulting path is the path that will match the
 `Parent Action -> Child Action` chain. 
 
-In the example above, `FirstChild` is the child of the `MainAction`. While `SecondChild` is the child for the 
+In the example above, `FirstChild` is the child of the `MainAction`. While `SecondChild` is the child of the 
 `FirstChild` config:
 
 * URL `/chain` will match the chain `MainAction` 
@@ -88,7 +90,7 @@ MainAction executing
 
 6. Click on the `First Child` link. This will update the URL to `/chain/first
 
-Now you should see this new lines in your console:
+Now you should see these new lines in your console:
  
 ```
 Navigating to: /chain/first

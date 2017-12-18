@@ -47,7 +47,7 @@ namespace('Example.Modules', function (window)
 		this._bindEvents();
 	};
 	
-
+	
 	HistoryJsNavigationModule.prototype.navigate = function (path)
 	{
 		console.log('Navigating to: ' + path);

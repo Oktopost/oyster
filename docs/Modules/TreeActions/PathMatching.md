@@ -8,7 +8,7 @@
 
 ### Path Matching
 
-In this example, two different urls are mapped to two different actions.
+In this example, two different URLs are mapped to two different actions.
 
 1. `/path_match` is mapped to `Example.PathMatch.MainAction`
 2. `/different/path` is mapped to `Example.PathMatch.SecondAction`
@@ -54,7 +54,7 @@ contains one configuration:
 * `Second` contains the config for the route `/different/path`
 
 Both of the actions are setup identically to the previous [Intro](Intro.md) example, the only 
-difference being there name and log message.
+difference being their name and log message.
 
 
 ### Running the Example
@@ -76,7 +76,7 @@ MainAction executing
 
 6. Click on the `Different Path` link. This will update the URL to `/different/path`, without refreshing the page.
 
-Now you should see this new lines in your console:
+Now you should see these new lines in your console:
  
 ```
 Navigating to: /different/path
