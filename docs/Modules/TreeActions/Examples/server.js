@@ -7,6 +7,11 @@ var app = express();
 app.use(express.static('bin'));
 
 
+app.get('/', function (req, res)
+{
+	res.sendFile(__dirname + '/main.html');
+});
+
 app.get('/intro', function (req, res)
 {
 	res.sendFile(__dirname + '/Intro/intro.html');
