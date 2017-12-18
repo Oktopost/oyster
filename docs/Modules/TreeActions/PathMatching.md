@@ -1,3 +1,6 @@
+[Action Loading Sequence](ActionLoadSequence.md)
+
+
 #### Table of Contents
 
   * [Path Matching](#path-matching)
@@ -8,7 +11,7 @@
 
 ### Path Matching
 
-In this example, to different urls are mapped to 2 different actions.
+In this example, two different urls are mapped to two different actions.
 
 1. `/path_match` is mapped to `Example.PathMatch.MainAction`
 2. `/different/path` is mapped to `Example.PathMatch.SecondAction`
@@ -45,12 +48,12 @@ namespace('Example.PathMatch', function (window)
 	};
 });
 ```
-> The keys `Main` and `Second` do not play any role, for the sake of this example, and can be replaced with any other value.
+> The keys `Main` and `Second` do not play any role for the sake of this example, and can be replaced with any other value.
 
 In this example, the top level configuration object consists of 2 objects: `Main` and `Second`. Each of those objects 
-contains one config. 
+contains one configuration:
 
-* `Main` contains the config for route `/path_mathc`
+* `Main` contains the config for route `/path_match`
 * `Second` contains the config for the route `/different/path`
 
 Both of the actions are setup identically to the previous [Intro](Intro.md) example, the only 
@@ -69,14 +72,14 @@ difference being there name and log message.
 Now in the developer tools' console you should see the following output:
 
 ```
-IntroAction initializing
-IntroAction activating
-IntroAction executing
+MainAction initializing
+MainAction activating
+MainAction executing
 ```
 
 6. Click on the `Different Path` link. This will update the URL to `/different/path`, without refreshing the page.
 
-The next lines should be know visible in the console:
+Now you should see this new lines in your console:
  
 ```
 Navigating to: /different/path
@@ -87,8 +90,7 @@ SecondAction executing
 MainAction was destroyed
 ```
 
-> Navigating to: /different/path line is made by the example's Navigation module. See `Example.Modules.HistoryJsNavigationModule.navigate`
-
+> "Navigating to: /different/path" log message is made by the example's Navigation module.
 
 #### References
 
