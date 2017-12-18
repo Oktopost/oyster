@@ -7024,10 +7024,10 @@ namespace('Example.Intro', function (window)
 });
 namespace('Example.Modules', function (window) 
 {
-	var is 						= window.Plankton.is;
+	var url		= window.Plankton.url;
 	
-	var inherit 				= window.Classy.inherit;
-	var classify 				= window.Classy.classify;
+	var inherit 	= window.Classy.inherit;
+	var classify 	= window.Classy.classify;
 	
 	var OysterModules			= window.Oyster.Modules.OysterModules;
 	var BaseNavigationModule	= window.Oyster.Modules.BaseNavigationModule;
@@ -7072,29 +7072,22 @@ namespace('Example.Modules', function (window)
 	};
 	
 
-	HistoryJsNavigationModule.prototype.navigate = function (url)
+	HistoryJsNavigationModule.prototype.navigate = function (path)
 	{
-		console.log('Navigating to: ' + url);
+		console.log('Navigating to: ' + path);
 
-		history.pushState(null, null, url);
-		this._routing.handleURL(url);
+		history.pushState(null, null, path);
+		this._routing.handleURL(path);
 	};
 
 	HistoryJsNavigationModule.prototype.goto = function (path, params)
 	{
-		var url = path;
-
-		if (is.object(params) && is.object.notEmpty(params))
-		{
-			url += '?' + $.param(params);
-		}
-
-		this.navigate(url);
+		this.navigate(url.encode(path, params || {}));
 	};
 	
-	HistoryJsNavigationModule.prototype.handleMiss = function (url)
+	HistoryJsNavigationModule.prototype.handleMiss = function (path)
 	{
-		console.error('Could not handle URL: ' + url);
+		console.error('Could not handle URL: ' + path);
 	};
 	
 	
