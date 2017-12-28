@@ -1,9 +1,11 @@
 namespace('Oyster', function (root)
 {
-	var LifeTime		= root.Duct.LifeTime;
 	var LifeBindFactory	= root.Duct.LT.LifeBindFactory;
 	
-	var classify = root.Classy.classify;
+	var inherit		= root.Classy.inherit;
+	var classify	= root.Classy.classify;
+	
+	var Component	= root.Oyster.Component;
 
 
 	/**
@@ -16,11 +18,15 @@ namespace('Oyster', function (root)
 	 */
 	function Module()
 	{
+		Component.call(this);
+		
 		classify(this);
 		
-		this._controller 	= null;
-		this._lt			= new LifeTime();
+		this._controller = null;
 	}
+	
+	
+	inherit(Module, Component);
 	
 	
 	/**
@@ -29,6 +35,7 @@ namespace('Oyster', function (root)
 	Module.prototype.setController = function (controller)
 	{
 		this._controller = controller;
+		this._setModuleManager(this._controller.manager());
 	};
 
 	/**
@@ -40,19 +47,11 @@ namespace('Oyster', function (root)
 	};
 	
 	/**
-	 * @return {LifeTime}
-	 */
-	Module.prototype.LT = function ()
-	{
-		return this._lt;
-	};
-	
-	/**
 	 * @return {ModuleManager}
 	 */
 	Module.prototype.manager = function ()
 	{
-		return this._controller.manager();
+		return this._manager();
 	};
 	
 	/**

@@ -13,7 +13,7 @@ suite('Module', () =>
 	test('module', () => 
 	{
 		var subject = new Module();
-		var controller = {};
+		var controller = { manager: () => {} };
 		
 		subject.setController(controller);
 		
@@ -35,17 +35,11 @@ suite('Module', () =>
 	{
 		var subject = new Module();
 		var obj = {};
-		var controller = { app: () => obj };
+		var controller = { app: () => obj, manager: () => {} };
 		
 		subject.setController(controller);
 		
 		assert.strictEqual(obj, subject.app());
-	});
-	
-	test('LT', () => 
-	{
-		var subject = new Module();
-		assert.instanceOf(subject.LT(), LifeTime);
 	});
 	
 	
