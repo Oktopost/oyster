@@ -142,7 +142,7 @@ suite('Action', () =>
 			var passedName = null;
 			var module = {};
 			
-			subject._setModuleManager({ get: (a) => { passedName = a; return module; } });
+			subject.setModuleManager({ get: (a) => { passedName = a; return module; } });
 			
 			assert.strictEqual(subject.modules('a'), module);
 			assert.equal(passedName, 'a');
@@ -153,7 +153,20 @@ suite('Action', () =>
 			var subject = new Action();
 			var moduleManager = { 'a': true };
 			
-			subject._setModuleManager(moduleManager);
+			subject.setModuleManager(moduleManager);
+			
+			assert.strictEqual(subject.modules(), moduleManager);
+		});
+	});
+	
+	suite('setModuleManager', () => 
+	{
+		test('Module manager set', () =>
+		{
+			var subject = new Action();
+			var moduleManager = { 'a': true };
+			
+			subject.setModuleManager(moduleManager);
 			
 			assert.strictEqual(subject.modules(), moduleManager);
 		});

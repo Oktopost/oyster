@@ -124,6 +124,7 @@ namespace('Oyster.Actions', function (root)
 			var action = new creators[index]();
 			var chainLink = new ActionChainLink(action); 
 			
+			action.set
 			action.setNavigator(this._navigator);
 			target.mount.push(chainLink);
 		}

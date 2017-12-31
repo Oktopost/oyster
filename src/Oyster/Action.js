@@ -79,7 +79,7 @@ namespace('Oyster', function (root)
 	
 	/**
 	 * @param {string=} name
-	 * @return {ModuleManager|*}
+	 * @return {ModuleManager|Module|null}
 	 */
 	Action.prototype.modules = function (name)
 	{
@@ -135,6 +135,14 @@ namespace('Oyster', function (root)
 	Action.prototype.setNavigator = function (navigator)
 	{
 		this._navigator = navigator;
+	};
+	
+	/**
+	 * @param {ModuleManager} manager
+	 */
+	Action.prototype.setModuleManager = function (manager)
+	{
+		this._setModuleManager(manager);
 	};
 	
 	
