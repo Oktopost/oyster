@@ -115,6 +115,22 @@ suite('ActionChain', () =>
 			assert.isTrue(isCalled);
 		});
 		
+		test.only('module manager passed to Action', () => 
+		{
+			var isCalled = false;
+			var module = createModule();
+			module._navigator = { goto: () => { isCalled = true; } };
+			
+			var subject = new ActionChain(module);
+			
+			var route = newActionRoute();
+			
+			subject.update(route, {});
+			
+			var manager = subject.chain()[0].action().modules();
+			assert.strictEqual(manager, module.manager());
+		});
+		
 		
 		suite('Chain State', () => 
 		{
