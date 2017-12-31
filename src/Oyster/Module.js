@@ -47,14 +47,6 @@ namespace('Oyster', function (root)
 	};
 	
 	/**
-	 * @return {ModuleManager}
-	 */
-	Module.prototype.manager = function ()
-	{
-		return this._manager();
-	};
-	
-	/**
 	 * @return {Application}
 	 */
 	Module.prototype.app = function ()

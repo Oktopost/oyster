@@ -18,14 +18,14 @@ suite('Component', () =>
 			
 			component._setModuleManager(manager);
 			
-			assert.strictEqual(component._manager(), manager);
+			assert.strictEqual(component.manager(), manager);
 		});
 		
 		test('Manager not set, return null', () => 
 		{
 			var component = new Component();
 			
-			assert.isNull(component._manager());
+			assert.isNull(component.manager());
 		});
 		
 		
@@ -38,7 +38,7 @@ suite('Component', () =>
 			component._setModuleManager(manager);
 			manager.get = function (name) { actualName = name; return 'ok'; };
 			
-			assert.equal(component._manager('abc'), 'ok');
+			assert.equal(component.manager('abc'), 'ok');
 			assert.equal(actualName, 'abc');
 		});
 	});
@@ -98,7 +98,7 @@ suite('Component', () =>
 		test('Function passed, new component returned', () => 
 		{
 			var component = new Component(); 
-			var res = component._component(Component);
+			var res = component.component(Component);
 			
 			assert.instanceOf(res, Component);
 		});
@@ -108,7 +108,7 @@ suite('Component', () =>
 			var component = new Component(); 
 			var target = new Component();
 			
-			var res = component._component(target);
+			var res = component.component(target);
 			
 			assert.strictEqual(res, target);
 		});
@@ -118,7 +118,7 @@ suite('Component', () =>
 			var component = new Component(); 
 			component._setModuleManager(new ModuleManager());
 			
-			var res = component._component(Component);
+			var res = component.component(Component);
 			
 			assert.strictEqual(res._moduleManager, component._moduleManager);
 		});
@@ -134,7 +134,7 @@ suite('Component', () =>
 				isCalled = true;
 			};
 			
-			component._component(target);
+			component.component(target);
 			
 			assert.isTrue(isCalled);
 		});
@@ -152,7 +152,7 @@ suite('Component', () =>
 				manager = this._moduleManager;
 			};
 			
-			component._component(target);
+			component.component(target);
 			
 			assert.strictEqual(manager, component._moduleManager);
 		});
@@ -170,7 +170,7 @@ suite('Component', () =>
 				actual = manager;
 			};
 			
-			component._component(target);
+			component.component(target);
 			
 			assert.strictEqual(actual, component._moduleManager);
 		});
@@ -200,7 +200,7 @@ suite('Component', () =>
 			var component = new Component(); 
 			var target = new Component();
 			
-			component._component(target);
+			component.component(target);
 			component._destroy();
 			
 			assert.isTrue(target._isDestroyed());

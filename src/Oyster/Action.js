@@ -84,7 +84,7 @@ namespace('Oyster', function (root)
 	 */
 	Action.prototype.modules = function (name)
 	{
-		return this._manager(name);
+		return this.manager(name);
 	};
 	
 	/**

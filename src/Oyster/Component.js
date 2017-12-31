@@ -63,7 +63,7 @@ namespace('Oyster', function (root)
 	 * @return {Module|ModuleManager|null}
 	 * @protected
 	 */
-	Component.prototype._manager = function (name)
+	Component.prototype.manager = function (name)
 	{
 		if (!is(this._moduleManager))
 			return null;
@@ -78,7 +78,7 @@ namespace('Oyster', function (root)
 	 * @param {function|Component} item
 	 * @return {Component}
 	 */
-	Component.prototype._component = function (item)
+	Component.prototype.component = function (item)
 	{
 		if (is.function(item))
 			item = new item();
