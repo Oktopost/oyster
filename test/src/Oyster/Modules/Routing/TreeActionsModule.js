@@ -67,7 +67,7 @@ suite('TreeActionsModule', () =>
 		var subject = createSubject();
 		var isCalled = false;
 		
-		function MyAction() {}
+		function MyAction() { Action.call(this); }
 		inherit(MyAction, Action);
 		
 		MyAction.prototype.initialize = function () { isCalled = true; };

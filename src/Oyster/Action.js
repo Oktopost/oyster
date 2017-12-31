@@ -20,6 +20,7 @@ namespace('Oyster', function (root)
 	 * 
 	 * @param {Navigator=}			navigator
 	 * @param {ActionChainLink=}	chainLink
+	 * @extends {Component}
 	 * @constructor
 	 */
 	function Action(navigator, chainLink)

@@ -175,6 +175,21 @@ namespace('Oyster.Actions', function (root)
 	};
 	
 	/**
+	 * @param {[Action]} mounted
+	 * @private
+	 */
+	ActionChain.prototype._bindLifeTimeNodes = function (mounted)
+	{
+		foreach (mounted, this, function (actionChainLink) 
+		{
+			var action = actionChainLink.action();
+			var node = action.getLifeTimeNode();
+			
+			node.attach(this._module.getLifeTimeNode())
+		});
+	};
+	
+	/**
 	 * @param {ActionRoute} actionRoute
 	 * @param {*} params
 	 */
@@ -204,6 +219,7 @@ namespace('Oyster.Actions', function (root)
 		
 		this._unmount(target.unmount);
 		this._updateChainState(target, params, actionRoute);
+		this._bindLifeTimeNodes(target.mount);
 		
 		ActionChainLoader.invokeInitialize(target.mount, this._params, prevParams);
 		ActionChainLoader.invokeRefresh(target.unmodified, this._params, prevParams);

@@ -28,6 +28,9 @@ namespace('Oyster.Modules.Routing', function (root)
 	 */
 	function TreeActionsModule()
 	{
+		BaseRoutingModule.call(this);
+		
+		
 		classify(this);
 		
 		this._builder	= null;

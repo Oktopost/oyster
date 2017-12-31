@@ -14,7 +14,7 @@ namespace('Oyster.Modules', function (root)
 	 */
 	function BaseNavigationModule()
 	{
-		
+		Module.call(this);
 	}
 	
 	
