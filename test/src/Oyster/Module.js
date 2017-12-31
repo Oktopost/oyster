@@ -23,7 +23,7 @@ suite('Module', () =>
 	test('manager', () => 
 	{
 		var subject = new Module();
-		var obj = {};
+		var obj = { 'a': 1 };
 		var controller = { manager: () => obj };
 		
 		subject.setController(controller);
@@ -49,9 +49,7 @@ suite('Module', () =>
 		{
 			var m = new Module();
 			
-			var lifeTime = LifeBindFactory.instance().get(m);
-			
-			assert.strictEqual(lifeTime, m.LT());
+			assert.strictEqual(Module.lifeTimeBuilder(m), m.LT());
 		});
 		
 		test('Non action passed to lifeTimeBuilder, return null', () => 

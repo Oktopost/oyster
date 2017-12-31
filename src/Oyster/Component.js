@@ -60,11 +60,13 @@ namespace('Oyster', function (root)
 	
 	/**
 	 * @param {string=} name
-	 * @return {Module|ModuleManager}
+	 * @return {Module|ModuleManager|null}
 	 * @protected
 	 */
 	Component.prototype._manager = function (name)
 	{
+		if (!is(this._moduleManager))
+			return null;
 		if (is(name))
 			return this._moduleManager.get(name);
 		else 

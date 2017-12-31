@@ -21,6 +21,14 @@ suite('Component', () =>
 			assert.strictEqual(component._manager(), manager);
 		});
 		
+		test('Manager not set, return null', () => 
+		{
+			var component = new Component();
+			
+			assert.isNull(component._manager());
+		});
+		
+		
 		test('Module name passed, module requested from manager', () => 
 		{
 			var manager = new ModuleManager();

@@ -2,8 +2,8 @@ const root = require('../../index');
 const assert = require('chai').assert;
 
 
-const LifeTime		= root.Duct.LifeTime;
-var LifeBindFactory	= root.Duct.LT.LifeBindFactory;
+const LifeTime			= root.Duct.LifeTime;
+const LifeBindFactory	= root.Duct.LT.LifeBindFactory;
 
 const Action		= root.Oyster.Action;
 const Application	= root.Oyster.Application;
@@ -111,14 +111,11 @@ suite('Action', () =>
 			assert.isTrue(isKilled);
 		});
 		
-		
 		test('LifeTime object is extracted from Action', () => 
 		{
 			var action = new Action();
 			
-			var lifeTime = LifeBindFactory.instance().get(action);
-			
-			assert.strictEqual(lifeTime, action.LT());
+			assert.strictEqual(Action.lifeTimeBuilder(action), action.LT());
 		});
 		
 		test('Non action passed to lifeTimeBuilder, return null', () => 
@@ -129,7 +126,7 @@ suite('Action', () =>
 	
 	suite('modules', () => 
 	{
-		test('app not set, return null', () =>
+		test('Modules not set, return null', () =>
 		{
 			var subject = new Action();
 			
@@ -138,17 +135,27 @@ suite('Action', () =>
 			assert.isNull(subject.modules('a'));
 		});
 		
-		test('app set, return module by name', () =>
+		test('Modules Manager set, return module by name', () =>
 		{
 			var subject = new Action();
-			var app = new Application();
 			
+			var passedName = null;
 			var module = {};
 			
-			app._modules._modules['a'] = module;
-			subject.setChainLink({ app: () => app });
+			subject._setModuleManager({ get: (a) => { passedName = a; return module; } });
 			
 			assert.strictEqual(subject.modules('a'), module);
+			assert.equal(passedName, 'a');
+		});
+		
+		test('No name passed, return module manager', () =>
+		{
+			var subject = new Action();
+			var moduleManager = { 'a': true };
+			
+			subject._setModuleManager(moduleManager);
+			
+			assert.strictEqual(subject.modules(), moduleManager);
 		});
 	});
 });

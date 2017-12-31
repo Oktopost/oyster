@@ -1,12 +1,13 @@
 namespace('Oyster', function (root)
 {
 	var obj			= root.Plankton.obj;
+	var inherit		= root.Classy.inherit;
 	var classify	= root.Classy.classify;
 	
-	var LifeTime		= root.Duct.LifeTime;
 	var LifeBindFactory	= root.Duct.LT.LifeBindFactory;
 	
-	var ActionEvents = root.Oyster.Modules.Routing.TreeActions.ActionEvents;
+	var Component		= root.Oyster.Component;
+	var ActionEvents 	= root.Oyster.Modules.Routing.TreeActions.ActionEvents;
 
 
 	/**
@@ -23,19 +24,25 @@ namespace('Oyster', function (root)
 	 */
 	function Action(navigator, chainLink)
 	{
-		var self = classify(this);
+		Component.call(this);
+		
+		var self = this;
 		
 		this._chainLink = chainLink || null;
 		this._navigator	= navigator || null;
 		this._params	= null;
 		this._events	= new ActionEvents();
-		this._lt		= new LifeTime();
 		
 		this._events.onDestroy(function () 
 		{
-			self._lt.kill();
+			self.LT().kill();
 		});
+		
+		classify(this);
 	}
+	
+	
+	inherit(Action, Component);
 	
 	
 	/**
@@ -71,21 +78,12 @@ namespace('Oyster', function (root)
 	};
 	
 	/**
-	 * @returns {LifeTime|LifeBind}
-	 */
-	Action.prototype.LT = function ()
-	{
-		return this._lt;
-	};
-	
-	/**
 	 * @param {string=} name
 	 * @return {ModuleManager|*}
 	 */
 	Action.prototype.modules = function (name)
 	{
-		var app = this._chainLink.app();
-		return (app ? app.modules(name) : null);
+		return this._manager(name);
 	};
 	
 	/**
