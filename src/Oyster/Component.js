@@ -57,16 +57,15 @@ namespace('Oyster', function (root)
 	{
 		this._node.destroy();
 	};
-
 	
-	Component.prototype._mount = function () {};
+	
+	Component.prototype._mount = function (manager) {};
 	Component.prototype._unmount = function () {};
 	
 	
 	/**
 	 * @param {string=} name
 	 * @return {Module|ModuleManager|null}
-	 * @protected
 	 */
 	Component.prototype.manager = function (name)
 	{
