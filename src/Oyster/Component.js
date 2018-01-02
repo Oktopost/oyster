@@ -18,8 +18,8 @@ namespace('Oyster', function (root)
 		this._moduleManager	= null;
 		this._node			= new LifeTimeNode(this);
 		
-		this._node.onAttached(function () { self.mount(self._moduleManager); });
-		this._node.onDestroy(function () { self.unmount(); });
+		this._node.onAttached(function () { self._mount(self._moduleManager); });
+		this._node.onDestroy(function () { self._unmount(); });
 		
 		classify(this);
 	}
@@ -57,6 +57,11 @@ namespace('Oyster', function (root)
 	{
 		this._node.destroy();
 	};
+
+	
+	Component.prototype._mount = function () {};
+	Component.prototype._unmount = function () {};
+	
 	
 	/**
 	 * @param {string=} name
@@ -73,6 +78,7 @@ namespace('Oyster', function (root)
 			return this._moduleManager;
 	};
 	
+	
 	/**
 	 * 
 	 * @param {function|Component} item
@@ -88,10 +94,6 @@ namespace('Oyster', function (root)
 		
 		return item;
 	};
-	
-	
-	Component.prototype.mount = function () {};
-	Component.prototype.unmount = function () {};
 	
 	
 	/**

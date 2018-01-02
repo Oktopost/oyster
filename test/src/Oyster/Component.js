@@ -129,7 +129,7 @@ suite('Component', () =>
 			var target = new Component();
 			var isCalled = false;
 			
-			target.mount = function () 
+			target._mount = function () 
 			{
 				isCalled = true;
 			};
@@ -147,7 +147,7 @@ suite('Component', () =>
 			
 			component._setModuleManager(new ModuleManager());
 			
-			target.mount = function () 
+			target._mount = function () 
 			{
 				manager = this._moduleManager;
 			};
@@ -165,7 +165,7 @@ suite('Component', () =>
 			
 			component._setModuleManager(new ModuleManager());
 			
-			target.mount = function (manager) 
+			target._mount = function (manager) 
 			{
 				actual = manager;
 			};
@@ -184,7 +184,7 @@ suite('Component', () =>
 			var component = new Component();
 			var isCalled = false;
 			
-			component.unmount = function (manager) 
+			component._unmount = function (manager) 
 			{
 				isCalled = true;
 			};
@@ -211,7 +211,7 @@ suite('Component', () =>
 			var component = new Component();
 			var calledCount = 0;
 			
-			component.unmount = function (manager) 
+			component._unmount = function (manager) 
 			{
 				calledCount++;
 			};
