@@ -4,6 +4,7 @@ namespace('Oyster', function (root)
 	var classify		= root.Classy.classify;
 	
 	var LifeTimeNode	= root.Duct.LifeTimeNode;
+	var Binder			= root.Duct.LT.Binder;
 	var LifeBindFactory	= root.Duct.LT.LifeBindFactory;
 	
 	
@@ -13,6 +14,9 @@ namespace('Oyster', function (root)
 	 */
 	function Component()
 	{
+		classify(this);
+		
+		
 		var self = this;
 		
 		this._moduleManager	= null;
@@ -21,7 +25,7 @@ namespace('Oyster', function (root)
 		this._node.onAttached(function () { self._mount(self._moduleManager); });
 		this._node.onDestroy(function () { self._unmount(); });
 		
-		classify(this);
+		Binder.attach(this, this._node.LT(), /(^_handle.+|^_.+Handler)/);
 	}
 	
 	

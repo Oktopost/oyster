@@ -7,7 +7,7 @@ namespace('Oyster', function (root)
 	var LifeBindFactory	= root.Duct.LT.LifeBindFactory;
 	
 	var Component		= root.Oyster.Component;
-	var ActionEvents 	= root.Oyster.Modules.Routing.TreeActions.ActionEvents;
+	var ActionEvents	= root.Oyster.Modules.Routing.TreeActions.ActionEvents;
 
 
 	/**

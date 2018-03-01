@@ -1,9 +1,11 @@
 const root = require('../../index');
 const assert = require('chai').assert;
 
-
+const inherit			= root.Classy.inherit;
 const Component			= root.Oyster.Component;
 const ModuleManager		= root.Oyster.ModuleManager;
+
+const Binder			= root.Duct.LT.Binder;
 const LifeBindFactory	= root.Duct.LT.LifeBindFactory;
 
 
@@ -239,6 +241,42 @@ suite('Component', () =>
 			var l = { LT: function () { return new LifeTime(); }};
 			
 			assert.throws(() => LifeBindFactory.instance().get(l));
+		});
+	});
+	
+	
+	suite('constructor', () => 
+	{
+		test('Binder called on appropriate functions', () => 
+		{
+			function Com() { Component.call(this); }
+			inherit(Com, Component);
+			
+			Com.prototype._handleA = function() {};
+			Com.prototype._aHandler = function() {};
+			
+			var c = new Com();
+			
+			assert.equal(c._handleA[Binder.ATTACHMENT_KEY], c.LT());
+			assert.equal(c._aHandler[Binder.ATTACHMENT_KEY], c.LT());
+		});
+		
+		test('Binder will not attach LT to functions not matching handler pattern', () => 
+		{
+			function Com() { Component.call(this); }
+			inherit(Com, Component);
+			
+			Com.prototype.handleA = function() {};
+			Com.prototype.aHandler = function() {};
+			Com.prototype.aHandle = function() {};
+			Com.prototype.handlerA = function() {};
+			
+			var c = new Com();
+			
+			assert.isUndefined(c.handleA[Binder.ATTACHMENT_KEY], c.LT());
+			assert.isUndefined(c.aHandler[Binder.ATTACHMENT_KEY], c.LT());
+			assert.isUndefined(c.aHandle[Binder.ATTACHMENT_KEY], c.LT());
+			assert.isUndefined(c.handlerA[Binder.ATTACHMENT_KEY], c.LT());
 		});
 	});
 });
