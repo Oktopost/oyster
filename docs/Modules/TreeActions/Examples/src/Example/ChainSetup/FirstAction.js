@@ -36,7 +36,7 @@ namespace('Example.ChainSetup', function (window)
 		console.log('FirstAction refreshed');
 	};
 	
-	FirstAction.prototype.preDestroy = function ()
+	FirstAction.prototype.deactivate = function ()
 	{
 		console.log('FirstAction will be destroyed');
 	};

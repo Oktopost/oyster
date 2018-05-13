@@ -31,7 +31,7 @@ namespace('Example.PathMatch', function (window)
 		console.log('MainAction executing');
 	};
 	
-	MainAction.prototype.preDestroy = function ()
+	MainAction.prototype.deactivate = function ()
 	{
 		console.log('MainAction will be destroyed');
 	};

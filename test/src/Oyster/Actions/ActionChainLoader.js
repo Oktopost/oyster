@@ -26,7 +26,7 @@ suite('ActionChainLoader', () =>
 				{
 					return {
 						events:		() => new ActionEvents(),
-						preDestroy: (p1, p2) => invoked.push(['preDestroy',		'a' + i, p1, p2]),
+						deactivate: (p1, p2) => invoked.push(['deactivate',		'a' + i, p1, p2]),
 						initialize: (p1, p2) => invoked.push(['initialize',		'a' + i, p1, p2]),
 						refresh:	(p1, p2) => invoked.push(['refresh',		'a' + i, p1, p2]),
 						update:		(p1, p2) => invoked.push(['update',			'a' + i, p1, p2]),
@@ -69,7 +69,7 @@ suite('ActionChainLoader', () =>
 	
 	test('correct methods invoked', () => 
 	{
-		assertCalled(['preDestroy'], 'invokePreDestroy');
+		assertCalled(['deactivate'], 'invokeDeactivate');
 		assertCalled(['refresh'], 'invokeRefresh');
 		assertCalled(['initialize'], 'invokeInitialize');
 		assertCalled(['activate', 'execute'], 'invokeActivate');
@@ -219,7 +219,7 @@ suite('ActionChainLoader', () =>
 	
 	
 	
-	suite('invokePreDestroy', () => 
+	suite('invokeDeactivate', () => 
 	{
 		test('onDestroy event triggered on action', () => 
 		{
@@ -228,7 +228,7 @@ suite('ActionChainLoader', () =>
 			
 			action.events().onDestroy(() => { isCalled = true; });
 			
-			ActionChainLoader.invokePreDestroy(
+			ActionChainLoader.invokeDeactivate(
 				[
 					{ action: () => action }
 				],

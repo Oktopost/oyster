@@ -5,7 +5,7 @@
   * [Pre Condition](#pre-condition)
   * [Update Sequence](#update-sequence)
     * [Actions constructor](#actions-constructor)
-    * [preDestroy(newParams, prevParams)](#preDestroynewParams-prevParams)
+    * [deactivate(newParams, prevParams)](#deactivatenewParams-prevParams)
     * [Setup](#Setup)
     * [initialize(newParams, prevParams)](#initializenewParams-prevParams)
     * [refresh(newParams, prevParams)](#refreshnewParams-prevParams)
@@ -58,7 +58,7 @@ In this scenario, the next list of steps must be executed during the **Actions C
 
 The update sequence on route change is executed as follows:
 
-1. **preDestroy** on actions to be unmount.
+1. **deactivate** on actions to be unmount.
 2. **initialize** on actions to be mounted.
 3. The chain state is updated to match the new target chain.
 4. **refresh** on all unmodified actions.
@@ -66,7 +66,7 @@ The update sequence on route change is executed as follows:
 6. **activate** and **execute** on all newly mounted actions.
 7. Asynchronous call to **destroy** on all unmounted actions.
 
-Note that each step is performed on parents first. For example the **preDestroy** method is called
+Note that each step is performed on parents first. For example the **deactivate** method is called
 first on **C'** and then **D**.
 
 ### Actions constructor
@@ -76,11 +76,11 @@ However, there is no promise to when the new action is actually constructed, the
 you must never use the constructor of the action for it's initialization. For this purpose, 
 the **Action.initialize** method exists.
 
-### preDestroy(newParams, prevParams)
+### deactivate(newParams, prevParams)
 
 > Target Actions: **C'** and **D**
 
-This **preDestroy** method is invoked on all the actions that should be unmount and are no longer present in 
+This **deactivate** method is invoked on all the actions that should be unmount and are no longer present in 
 the new **Actions chain**.
 
 ### Setup
@@ -146,10 +146,10 @@ is treated as an empty array - as if there are no Actions to unmount, update or 
 
 ## Notes
 
-- During **preDestroy** call, the state of the chain is still not updated, and *Action.params()* method will return
+- During **deactivate** call, the state of the chain is still not updated, and *Action.params()* method will return
 previous route's parameters instead of the new ones.
 - Unlike Modules, Actions' update methods may not be defined. The parent **Oyster.Action** class does not have 
-the **preDestroy**, **initialize**, **refresh**, **update**, **activate**, **execute** or **destroy** methods in
+the **deactivate**, **initialize**, **refresh**, **update**, **activate**, **execute** or **destroy** methods in
 it's prototype.
 - All methods in the Update sequence, excluding **destroy**, are invoked synchronously one after another.
 - Exceptions will not break the loading sequence.

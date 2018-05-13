@@ -61,7 +61,7 @@ suite('ActionChain', () =>
 			execute: 	function (a, b) { stack.push(['execute', name, a, b]); },
 			update:		function (a, b) { stack.push(['update', name, a, b]); },
 			activate:	function (a, b) { stack.push(['activate', name, a, b]); },
-			preDestroy:	function (a, b) { stack.push(['preDestroy', name, a, b]); },
+			deactivate:	function (a, b) { stack.push(['deactivate', name, a, b]); },
 			destroy:	function (a, b) { stack.push(['destroy', name, a, b]); }
 		});
 	}
@@ -431,7 +431,7 @@ suite('ActionChain', () =>
 				{
 					assert.deepEqual(called,
 						[
-							['preDestroy', 'B', { a: 2 }, { a: 1 }],
+							['deactivate', 'B', { a: 2 }, { a: 1 }],
 							['refresh', 'A', { a: 2 }, { a: 1 }],
 							['destroy', 'B', { a: 2 }, { a: 1 }],
 							
@@ -457,7 +457,7 @@ suite('ActionChain', () =>
 				{
 					assert.deepEqual(called,
 						[
-							['preDestroy', 'B', { a: 2 }, { a: 1 }],
+							['deactivate', 'B', { a: 2 }, { a: 1 }],
 							['update', 'A', { a: 2 }, { a: 1 }],
 							['execute', 'A', { a: 2 }, { a: 1 }],
 							['destroy', 'B', { a: 2 }, { a: 1 }],
@@ -485,7 +485,7 @@ suite('ActionChain', () =>
 				{
 					assert.deepEqual(called,
 						[
-							['preDestroy', 'B', { a: 2 }, { a: 1 }],
+							['deactivate', 'B', { a: 2 }, { a: 1 }],
 							['initialize', 'C', { a: 2 }, { a: 1 }],
 							['refresh', 'A', { a: 2 }, { a: 1 }],
 							['activate', 'C', { a: 2 }, { a: 1 }],
@@ -518,8 +518,8 @@ suite('ActionChain', () =>
 				{
 					assert.deepEqual(called,
 						[
-							['preDestroy', 'C', { a: 2, b: 3 }, { a: 2 }],
-							['preDestroy', 'D', { a: 2, b: 3 }, { a: 2 }],
+							['deactivate', 'C', { a: 2, b: 3 }, { a: 2 }],
+							['deactivate', 'D', { a: 2, b: 3 }, { a: 2 }],
 							
 							['initialize', 'E', { a: 2, b: 3 }, { a: 2 }],
 							['initialize', 'F', { a: 2, b: 3 }, { a: 2 }],

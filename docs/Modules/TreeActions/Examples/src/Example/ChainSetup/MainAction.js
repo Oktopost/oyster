@@ -36,7 +36,7 @@ namespace('Example.ChainSetup', function (window)
 		console.log('MainAction executing');
 	};
 	
-	MainAction.prototype.preDestroy = function ()
+	MainAction.prototype.deactivate = function ()
 	{
 		console.log('MainAction will be destroyed');
 	};

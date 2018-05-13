@@ -215,7 +215,7 @@ namespace('Oyster.Actions', function (root)
 		var target = this._buildChangesObject(actionRoute, params);
 		var prevParams = obj.copy(this._params); 
 		
-		ActionChainLoader.invokePreDestroy(target.unmount, params, this._params);
+		ActionChainLoader.invokeDeactivate(target.unmount, params, this._params);
 		
 		this._unmount(target.unmount);
 		this._updateChainState(target, params, actionRoute);

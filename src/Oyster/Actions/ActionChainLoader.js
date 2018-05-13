@@ -61,10 +61,11 @@ namespace('Oyster.Actions', function (root)
 		 * @param {*} prevParams
 		 * @private
 		 */
-		invokePreDestroy: function (actions, params, prevParams)
+		invokeDeactivate: function (actions, params, prevParams)
 		{
 			foreach(actions, function (item)
 			{
+				ActionChainLoader._invokeMethod(item.action(), 'deactivate', [params, prevParams]);
 				ActionChainLoader._invokeMethod(item.action(), 'preDestroy', [params, prevParams]);
 				
 				var events = item.action().events();
