@@ -20,8 +20,43 @@ namespace('Oyster', function (root)
 		classify(this);
 		
 		this._modules = new ModuleManager(this);
+		this._baseUrl = null;
 	}
 	
+	
+	Application.prototype._processBaseUrl = function()
+	{
+		if (is.function(this._baseUrl))
+			return this._baseUrl();
+		
+		if (is.string(this._baseUrl))
+			return this._baseUrl;
+		
+		try
+		{
+			return this._baseUrl.toString();
+		}
+		catch (e)
+		{
+			return '/';
+		}
+	};
+	
+	Application.prototype._getDefaultUrl = function()
+	{
+		return window.location.pathname + window.location.search;
+	};
+	
+	Application.prototype._getBaseUrl = function()
+	{
+		return is(this._baseUrl) ? this._processBaseUrl() : this._getDefaultUrl();
+	};
+	
+	
+	Application.prototype.setBaseUrl = function(closure)
+	{
+		this._baseUrl = closure;
+	};
 	
 	/**
 	 * @param {string|*=} config
@@ -50,7 +85,7 @@ namespace('Oyster', function (root)
 			{
 				/** @var {BaseRoutingModule} */
 				var actionsModule = this.modules(OysterModules.RoutingModule);
-				actionsModule.handleURL(window.location.pathname + window.location.search);
+				actionsModule.handleURL(this._getBaseUrl());
 			})
 			.bind(this));
 	};
