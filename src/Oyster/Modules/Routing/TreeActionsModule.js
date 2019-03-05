@@ -90,6 +90,11 @@ namespace('Oyster.Modules.Routing', function (root)
 		return RoutingConfigParser.parse(this, config, this._builder);
 	};
 	
+	TreeActionsModule.prototype.reloadChain = function ()
+	{
+		return RoutingConfigParser.parse(this, config, this._builder);
+	};
+	
 	
 	/**
 	 * @return {Navigator}

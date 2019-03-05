@@ -205,14 +205,13 @@ namespace('Oyster.Actions', function (root)
 		return target;
 	};
 	
-	
 	/**
-	 * @param {ActionRoute} actionRoute
+	 * @param {*} target
 	 * @param {*} params
+	 * @param {ActionRoute} actionRoute
 	 */
-	ActionChain.prototype.update = function (actionRoute, params)
+	ActionChain.prototype._applyChain = function (target, params, actionRoute)
 	{
-		var target = this._buildChangesObject(actionRoute, params);
 		var prevParams = obj.copy(this._params); 
 		
 		ActionChainLoader.invokeDeactivate(target.unmount, params, this._params);
@@ -227,6 +226,42 @@ namespace('Oyster.Actions', function (root)
 		ActionChainLoader.invokeActivate(target.mount, this._params, prevParams);
 		
 		ActionChainLoader.invokeDestroy(target.unmount, this._params, prevParams);
+	};
+	
+	/**
+	 * @param {ActionRoute} actionRoute
+	 * @param {*} params
+	 */
+	ActionChain.prototype._buildRefreshObject = function ()
+	{
+		var target = {
+			unmodified: [],
+			modified: [],
+			unmount: this._chain.concat(),
+		};
+		
+		this._findMounted(this._route, target);
+		
+		return target;
+	};
+	
+	
+	/**
+	 * @param {ActionRoute} actionRoute
+	 * @param {*} params
+	 */
+	ActionChain.prototype.update = function (actionRoute, params)
+	{
+		var target = this._buildChangesObject(actionRoute, params);
+		
+		this._applyChain(target, params, actionRoute);
+	};
+	
+	ActionChain.prototype.refresh = function ()
+	{
+		var target = this._buildRefreshObject();
+		
+		this._applyChain(target, obj.copy(this._params), this._route);
 	};
 	
 	
