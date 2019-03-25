@@ -62,7 +62,7 @@ suite('TreeActionsModule', () =>
 		return (func.postponed(() => { assert.equal(calledWith, '/abc'); }, 1))();
 	});
 	
-	test('handle', () => 
+	test('handle', () =>
 	{
 		var subject = createSubject();
 		var isCalled = false;
@@ -83,6 +83,39 @@ suite('TreeActionsModule', () =>
 		subject.handleURL('abc');
 		
 		return (func.postponed(() => { assert.isTrue(isCalled); }, 1))();
+	});
+	
+	test('reloadChain', () =>
+	{
+		var subject = createSubject();
+		var actionCalled = 0;
+		
+		function MyAction() { Action.call(this); }
+		inherit(MyAction, Action);
+		
+		MyAction.prototype.initialize = function () { actionCalled++; };
+		
+		subject.setupRoutes({
+			$:
+			{
+				path: 'abc',
+				action: MyAction
+			}
+		});
+		
+		subject.handleURL('abc');
+		
+		return (func.postponed(() =>
+		{
+			var chain = subject._chain;
+			
+			assert.equal(actionCalled, 1);
+			
+			subject.reloadChain();
+			
+			assert.strictEqual(chain, subject._chain);
+			assert.equal(actionCalled, 2);
+		}, 1))();
 	});
 	
 	test('navigator', () => 

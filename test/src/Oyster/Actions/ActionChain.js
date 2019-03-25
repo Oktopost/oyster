@@ -5,7 +5,6 @@ const assert = require('chai').assert;
 const inherit	= root.Classy.inherit;
 const foreach	= root.Plankton.foreach;
 const func		= root.Plankton.func;
-const obj		= root.Plankton.obj;
 
 const Action			= root.Oyster.Action;
 const Application		= root.Oyster.Application;
@@ -20,7 +19,7 @@ const ActionRoute		= root.Oyster.Routing.ActionRoute;
 const Route				= root.SeaRoute.Route.Route;
 
 
-suite('ActionChain', () => 
+suite('ActionChain', () =>
 {
 	function newRoute()
 	{
@@ -97,7 +96,7 @@ suite('ActionChain', () =>
 	
 	suite('update', () =>
 	{
-		test('navigator passed to Action', () => 
+		test('navigator passed to Action', () =>
 		{
 			var isCalled = false;
 			var module = createModule();
@@ -115,7 +114,7 @@ suite('ActionChain', () =>
 			assert.isTrue(isCalled);
 		});
 		
-		test('module manager passed to Action', () => 
+		test('module manager passed to Action', () =>
 		{
 			var module = createModule();
 			
@@ -128,7 +127,7 @@ suite('ActionChain', () =>
 			assert.strictEqual(manager, module.manager());
 		});
 		
-		test('LifeTime object bounded to module', () => 
+		test('LifeTime object bounded to module', () =>
 		{
 			var module = createModule();
 			
@@ -142,9 +141,9 @@ suite('ActionChain', () =>
 		});
 		
 		
-		suite('Chain State', () => 
+		suite('Chain State', () =>
 		{
-			test('New params set', () => 
+			test('New params set', () =>
 			{
 				var subject = createSubject();
 				var route = newActionRoute();
@@ -154,7 +153,7 @@ suite('ActionChain', () =>
 				assert.deepEqual(subject.params(), { a: 1, c: 2 });
 			});
 			
-			test('New params set when update called more then once', () => 
+			test('New params set when update called more then once', () =>
 			{
 				var subject = createSubject();
 				var route = newActionRoute();
@@ -165,7 +164,7 @@ suite('ActionChain', () =>
 				assert.deepEqual(subject.params(), { a: 4, c: 5 });
 			});
 			
-			test('Route set', () => 
+			test('Route set', () =>
 			{
 				var subject = createSubject();
 				var actionRoute = newActionRoute();
@@ -175,7 +174,7 @@ suite('ActionChain', () =>
 				assert.strictEqual(subject.route(), actionRoute);
 			});
 			
-			test('Route set when update called more then once', () => 
+			test('Route set when update called more then once', () =>
 			{
 				var subject = createSubject();
 				var actionRoute = newActionRoute();
@@ -186,7 +185,7 @@ suite('ActionChain', () =>
 				assert.strictEqual(subject.route(), actionRoute);
 			});
 			
-			test('Chain updated', () => 
+			test('Chain updated', () =>
 			{
 				var subject = createSubject();
 				
@@ -195,7 +194,7 @@ suite('ActionChain', () =>
 				assert.equal(subject.chain().length, 1);
 			});
 			
-			test('Chain updated after update called more then once', () => 
+			test('Chain updated after update called more then once', () =>
 			{
 				var subject = createSubject();
 				
@@ -207,9 +206,9 @@ suite('ActionChain', () =>
 		});
 		
 		
-		suite('Links State', () => 
+		suite('Links State', () =>
 		{
-			test('Single action, chain structure is correct', () => 
+			test('Single action, chain structure is correct', () =>
 			{
 				var subject = createSubject();
 				var actionRoute = newActionRoute();
@@ -221,10 +220,10 @@ suite('ActionChain', () =>
 				assert.instanceOf(subject.chain()[0].action(), PlainAction);
 				assert.isTrue(subject.chain()[0].isMounted());
 				assert.isFalse(subject.chain()[0].hasParent());
-				assert.isFalse(subject.chain()[0].hasChild());				
+				assert.isFalse(subject.chain()[0].hasChild());
 			});
 			
-			test('Two actions, chain structure is correct', () => 
+			test('Two actions, chain structure is correct', () =>
 			{
 				var subject = createSubject();
 				var actionRoute = newActionRoute([PlainAction, PlainActionB], [[],[]]);
@@ -242,11 +241,11 @@ suite('ActionChain', () =>
 				assert.instanceOf(subject.chain()[1], ActionChainLink);
 				assert.instanceOf(subject.chain()[1].action(), PlainActionB);
 				assert.isTrue(subject.chain()[1].isMounted());
-				assert.strictEqual(subject.chain()[1].parent(), subject.chain()[0]);	
+				assert.strictEqual(subject.chain()[1].parent(), subject.chain()[0]);
 				assert.isFalse(subject.chain()[1].hasChild());
 			});
 			
-			test('Multiple actions, chain structure is correct', () => 
+			test('Multiple actions, chain structure is correct', () =>
 			{
 				var subject = createSubject();
 				var actionRoute = newActionRoute([PlainAction, PlainActionB, PlainActionC], [[],[],[]]);
@@ -262,7 +261,7 @@ suite('ActionChain', () =>
 				assert.strictEqual(subject.chain()[1].child(), subject.chain()[2]);
 			});
 			
-			test('Chain updated on consecutive calls', () => 
+			test('Chain updated on consecutive calls', () =>
 			{
 				var subject = createSubject();
 				
@@ -279,7 +278,7 @@ suite('ActionChain', () =>
 				assert.instanceOf(subject.chain()[1].action(), PlainAction);
 			});
 			
-			test('Old chain dismounted', () => 
+			test('Old chain dismounted', () =>
 			{
 				var subject = createSubject();
 				
@@ -292,7 +291,151 @@ suite('ActionChain', () =>
 		});
 	});
 	
-	suite('sanity', () => 
+	suite('refresh', () =>
+	{
+		test('navigator passed to Action', () =>
+		{
+			var isCalled = false;
+			var module = createModule();
+			module._navigator = { goto: () => { isCalled = true; } };
+
+			var subject = new ActionChain(module);
+
+			var route = newActionRoute();
+
+			subject.update(route, {});
+			subject.refresh();
+
+			subject.chain()[0].action().navigate('a', {});
+			assert.isTrue(isCalled);
+		});
+
+		test('module manager passed to Action', () =>
+		{
+			var module = createModule();
+
+			var subject = new ActionChain(module);
+			var route = newActionRoute();
+
+			subject.update(route, {});
+			subject.refresh();
+
+			var manager = subject.chain()[0].action().modules();
+			assert.strictEqual(manager, module.manager());
+		});
+
+		test('LifeTime object bounded to module', () =>
+		{
+			var module = createModule();
+
+			var subject = new ActionChain(module);
+			var route = newActionRoute();
+
+			subject.update(route, {});
+			subject.refresh();
+
+			var action = subject.chain()[0].action();
+			assert.strictEqual(action.getLifeTimeNode().parent(), module.getLifeTimeNode());
+		});
+		
+		
+		suite('Chain State', () =>
+		{
+			test('Params were not changed after refresh', () =>
+			{
+				var subject = createSubject();
+				var route = newActionRoute();
+				
+				subject.update(route, { a: 1, c: 2 });
+				subject.refresh();
+				
+				assert.deepEqual(subject.params(), { a: 1, c: 2 });
+			});
+			
+			test('Route was not changed after refresh', () =>
+			{
+				var subject = createSubject();
+				var actionRoute = newActionRoute();
+				
+				subject.update(actionRoute, {});
+				subject.refresh();
+				
+				assert.strictEqual(subject.route(), actionRoute);
+			});
+		});
+		
+		
+		suite('Links State', () =>
+		{
+			test('Single action, chain structure is correct after refresh', () =>
+			{
+				var subject = createSubject();
+				var actionRoute = newActionRoute();
+
+				subject.update(actionRoute, {});
+				subject.refresh();
+
+				assert.equal(subject.chain().length, 1);
+				assert.instanceOf(subject.chain()[0], ActionChainLink);
+				assert.instanceOf(subject.chain()[0].action(), PlainAction);
+				assert.isTrue(subject.chain()[0].isMounted());
+				assert.isFalse(subject.chain()[0].hasParent());
+				assert.isFalse(subject.chain()[0].hasChild());
+			});
+
+			test('Two actions, chain structure is correct after refresh', () =>
+			{
+				var subject = createSubject();
+				var actionRoute = newActionRoute([PlainAction, PlainActionB], [[],[]]);
+
+				subject.update(actionRoute, {});
+
+				assert.equal(subject.chain().length, 2);
+
+				assert.instanceOf(subject.chain()[0], ActionChainLink);
+				assert.instanceOf(subject.chain()[0].action(), PlainAction);
+				assert.isTrue(subject.chain()[0].isMounted());
+				assert.isFalse(subject.chain()[0].hasParent());
+				assert.strictEqual(subject.chain()[0].child(), subject.chain()[1]);
+
+				assert.instanceOf(subject.chain()[1], ActionChainLink);
+				assert.instanceOf(subject.chain()[1].action(), PlainActionB);
+				assert.isTrue(subject.chain()[1].isMounted());
+				assert.strictEqual(subject.chain()[1].parent(), subject.chain()[0]);
+				assert.isFalse(subject.chain()[1].hasChild());
+			});
+
+			test('Multiple actions, chain structure is correct after refresh', () =>
+			{
+				var subject = createSubject();
+				var actionRoute = newActionRoute([PlainAction, PlainActionB, PlainActionC], [[],[],[]]);
+
+				subject.update(actionRoute, {});
+				subject.refresh();
+
+				assert.equal(subject.chain().length, 3);
+
+				assert.instanceOf(subject.chain()[1], ActionChainLink);
+				assert.instanceOf(subject.chain()[1].action(), PlainActionB);
+				assert.isTrue(subject.chain()[1].isMounted());
+				assert.strictEqual(subject.chain()[1].parent(), subject.chain()[0]);
+				assert.strictEqual(subject.chain()[1].child(), subject.chain()[2]);
+			});
+
+			test('Old chain dismounted', () =>
+			{
+				var subject = createSubject();
+				
+				subject.update(newActionRoute([PlainAction], [[],[],[]]), {});
+				var chain = subject.chain().concat();
+				subject.refresh();
+				
+				assert.isFalse(chain[0].isMounted());
+			});
+		});
+	});
+	
+	suite('sanity', () =>
 	{
 		test('First load', () =>
 		{
@@ -427,7 +570,7 @@ suite('ActionChain', () =>
 			called.splice(0);
 			subject.update(actionRouteB, { a: 2 });
 			
-			return func.async.do(() => 
+			return func.async.do(() =>
 				{
 					assert.deepEqual(called,
 						[
@@ -453,7 +596,7 @@ suite('ActionChain', () =>
 			called.splice(0);
 			subject.update(actionRouteB, { a: 2 });
 			
-			return func.async.do(() => 
+			return func.async.do(() =>
 				{
 					assert.deepEqual(called,
 						[
@@ -481,7 +624,7 @@ suite('ActionChain', () =>
 			called.splice(0);
 			subject.update(actionRouteB, { a: 2 });
 			
-			return func.async.do(() => 
+			return func.async.do(() =>
 				{
 					assert.deepEqual(called,
 						[
@@ -514,7 +657,7 @@ suite('ActionChain', () =>
 			called.splice(0);
 			subject.update(actionRouteB, { a: 2, b: 3 });
 			
-			return func.async.do(() => 
+			return func.async.do(() =>
 				{
 					assert.deepEqual(called,
 						[
