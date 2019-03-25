@@ -304,8 +304,11 @@ suite('ActionChain', () =>
 			var route = newActionRoute();
 
 			subject.update(route, {});
+			
+			
 			subject.refresh();
-
+			
+			
 			subject.chain()[0].action().navigate('a', {});
 			assert.isTrue(isCalled);
 		});
@@ -318,7 +321,10 @@ suite('ActionChain', () =>
 			var route = newActionRoute();
 
 			subject.update(route, {});
+			
+			
 			subject.refresh();
+			
 
 			var manager = subject.chain()[0].action().modules();
 			assert.strictEqual(manager, module.manager());
@@ -332,7 +338,10 @@ suite('ActionChain', () =>
 			var route = newActionRoute();
 
 			subject.update(route, {});
+			
+			
 			subject.refresh();
+			
 
 			var action = subject.chain()[0].action();
 			assert.strictEqual(action.getLifeTimeNode().parent(), module.getLifeTimeNode());
@@ -347,7 +356,10 @@ suite('ActionChain', () =>
 				var route = newActionRoute();
 				
 				subject.update(route, { a: 1, c: 2 });
+				
+				
 				subject.refresh();
+				
 				
 				assert.deepEqual(subject.params(), { a: 1, c: 2 });
 			});
@@ -358,7 +370,10 @@ suite('ActionChain', () =>
 				var actionRoute = newActionRoute();
 				
 				subject.update(actionRoute, {});
+				
+				
 				subject.refresh();
+				
 				
 				assert.strictEqual(subject.route(), actionRoute);
 			});
@@ -373,7 +388,10 @@ suite('ActionChain', () =>
 				var actionRoute = newActionRoute();
 
 				subject.update(actionRoute, {});
+				
+				
 				subject.refresh();
+				
 
 				assert.equal(subject.chain().length, 1);
 				assert.instanceOf(subject.chain()[0], ActionChainLink);
@@ -389,7 +407,11 @@ suite('ActionChain', () =>
 				var actionRoute = newActionRoute([PlainAction, PlainActionB], [[],[]]);
 
 				subject.update(actionRoute, {});
-
+				
+				
+				subject.refresh();
+				
+				
 				assert.equal(subject.chain().length, 2);
 
 				assert.instanceOf(subject.chain()[0], ActionChainLink);
@@ -411,7 +433,10 @@ suite('ActionChain', () =>
 				var actionRoute = newActionRoute([PlainAction, PlainActionB, PlainActionC], [[],[],[]]);
 
 				subject.update(actionRoute, {});
+				
+				
 				subject.refresh();
+				
 
 				assert.equal(subject.chain().length, 3);
 
@@ -428,7 +453,10 @@ suite('ActionChain', () =>
 				
 				subject.update(newActionRoute([PlainAction], [[],[],[]]), {});
 				var chain = subject.chain().concat();
+				
+				
 				subject.refresh();
+				
 				
 				assert.isFalse(chain[0].isMounted());
 			});

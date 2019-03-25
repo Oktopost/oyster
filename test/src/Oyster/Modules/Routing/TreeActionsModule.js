@@ -62,7 +62,7 @@ suite('TreeActionsModule', () =>
 		return (func.postponed(() => { assert.equal(calledWith, '/abc'); }, 1))();
 	});
 	
-	test('handle', () =>
+	test('handleURL', () =>
 	{
 		var subject = createSubject();
 		var isCalled = false;
@@ -73,7 +73,7 @@ suite('TreeActionsModule', () =>
 		MyAction.prototype.initialize = function () { isCalled = true; };
 		
 		subject.setupRoutes({
-			$: 
+			$:
 			{
 				path: 'abc',
 				action: MyAction

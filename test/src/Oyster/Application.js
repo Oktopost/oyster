@@ -14,7 +14,7 @@ const BaseNavigationModule	= root.Oyster.Modules.BaseNavigationModule;
 
 suite('Application', () => 
 {
-	test('run', () => 
+	test('run', () =>
 	{
 		var calledWith;
 		var app = new Application();
@@ -184,5 +184,79 @@ suite('Application', () =>
 			var app = new Application();
 			assert.instanceOf(app.modules(), ModuleManager);
 		});
+	});
+	
+	suite('_getBaseUrl', () =>
+	{
+		test('Get base URL if it is not set', () =>
+		{
+			var app = new Application();
+			app._baseUrl = null;
+			global.window = { location: { pathname: '/abc', search: 'def' } };
+			
+			baseUrl = app._getBaseUrl();
+			
+			assert.equal(baseUrl, '/abcdef');
+		});
+		
+		test('Process base URL if it is a function', () =>
+		{
+			var app = new Application();
+			app._baseUrl = () => {};
+			
+			baseUrl = app._getBaseUrl();
+			
+			assert.equal(baseUrl, app._baseUrl());
+		});
+		
+		test('Process base URL if it is a string', () =>
+		{
+			var app = new Application();
+			app._baseUrl = '/abc';
+			
+			baseUrl = app._getBaseUrl();
+			
+			assert.equal(baseUrl, '/abc');
+		});
+		
+		test('Process base URL if it is a number', () =>
+		{
+			var app = new Application();
+			app._baseUrl = 5;
+			
+			baseUrl = app._getBaseUrl();
+			
+			assert.equal(baseUrl, '5');
+		});
+		
+		test('Process base URL if it is an object', () =>
+		{
+			var app = new Application();
+			app._baseUrl = {a: 'b'};
+			
+			baseUrl = app._getBaseUrl();
+			
+			assert.equal(baseUrl, '[object Object]');
+		});
+		
+		test('Process base URL if it does not have toString method', () =>
+		{
+			var app = new Application();
+			app._baseUrl = {toString: null};
+			
+			baseUrl = app._getBaseUrl();
+			
+			assert.equal(baseUrl, '/');
+		});
+	});
+	
+	
+	test('Set base URL', () =>
+	{
+		var app = new Application();
+		
+		app.setBaseUrl('/abc');
+		
+		assert.equal(app._baseUrl, '/abc');
 	});
 });
